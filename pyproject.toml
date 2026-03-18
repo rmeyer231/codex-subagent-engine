@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "codex-subagent-engine"
+version = "0.1.0"
+description = "Parallel subagent spawning with TOML config, batch CSV processing, and approval workflows"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+dependencies = [
+    "anthropic>=0.40.0",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[project.scripts]
+cse = "src.cli:main"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

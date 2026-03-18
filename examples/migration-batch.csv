@@ -1,0 +1,6 @@
+file,task,language
+src/auth.py,"Rewrite using async/await instead of callbacks. Preserve all error handling.",Python
+src/database.py,"Replace raw SQL strings with parameterized queries to prevent SQL injection.",Python
+src/payments.py,"Add input validation for all monetary values. Raise ValueError for invalid amounts.",Python
+src/notifications.py,"Convert synchronous HTTP calls to async using httpx.AsyncClient.",Python
+src/cache.py,"Add type annotations to all public methods and properties.",Python

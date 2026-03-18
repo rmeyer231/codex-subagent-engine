@@ -1,0 +1,49 @@
+# Frontend debugging: map → diagnose → fix
+# Run: cse run examples/frontend-debug.toml
+
+[task]
+description = "Debug a React component that re-renders unexpectedly"
+
+[[agents]]
+type = "explorer"
+instructions = """
+Map the React component tree. Look for:
+1. Components that receive props but don't use React.memo
+2. Inline object/function definitions passed as props (creates new references each render)
+3. useEffect hooks with missing or incorrect dependency arrays
+4. Context providers that re-create their value on every render
+
+Produce a list of suspects in order of likelihood.
+"""
+
+[[agents]]
+type = "reviewer"
+instructions = """
+Based on the component map from the explorer, diagnose the root cause of the re-render issue.
+
+For each suspect:
+- Explain WHY it would cause unnecessary re-renders
+- Estimate the performance impact (high/medium/low)
+- Suggest the minimal fix
+
+Focus on the top 2-3 most likely culprits.
+"""
+depends_on = [0]
+
+[[agents]]
+type = "worker"
+instructions = """
+Write the exact code changes needed to fix the top issue identified in the diagnosis.
+For each change, provide:
+1. The original code (before)
+2. The fixed code (after)
+3. A one-line explanation of why this fixes the problem
+
+Only output changes, no surrounding explanation.
+"""
+depends_on = [1]
+approval_required = true
+
+[settings]
+max_threads = 2
+job_max_runtime_seconds = 60

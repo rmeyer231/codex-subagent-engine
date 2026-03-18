@@ -1,0 +1,63 @@
+# PR Review: spawn 3 parallel specialist reviewers
+# Run: cse run examples/pr-review.toml
+
+[task]
+description = "Review a pull request with parallel specialist agents"
+
+[[agents]]
+type = "explorer"
+instructions = """
+Map the structure of this codebase. List:
+1. All Python files and their primary purpose
+2. Key dependencies (from requirements.txt or pyproject.toml)
+3. Any configuration files
+4. Test files and coverage estimate
+
+Provide a concise architectural overview in 200 words or less.
+"""
+
+[[agents]]
+type = "reviewer"
+instructions = """
+Conduct a SECURITY review. Focus exclusively on:
+- SQL injection, XSS, command injection vulnerabilities
+- Hardcoded secrets or credentials
+- Insecure deserialization
+- Authentication/authorization bypasses
+- Sensitive data exposure
+
+Rate each finding: 🔴 critical, 🟡 warning, 🔵 info
+"""
+depends_on = [0]
+
+[[agents]]
+type = "reviewer"
+instructions = """
+Conduct a PERFORMANCE review. Focus exclusively on:
+- N+1 database queries
+- Missing indexes or inefficient queries
+- Memory leaks or excessive allocations
+- Blocking I/O in async contexts
+- Unnecessary re-computation (missing caching)
+
+Rate each finding: 🔴 critical, 🟡 warning, 🔵 info
+"""
+depends_on = [0]
+
+[[agents]]
+type = "worker"
+instructions = """
+Based on the security and performance reviews (context from previous agents),
+write a consolidated REVIEW SUMMARY that:
+1. Lists the top 3 issues to fix before merging (most critical first)
+2. Lists 2-3 nice-to-have improvements
+3. Gives an overall recommendation: APPROVE / REQUEST CHANGES / BLOCK
+
+Be direct and actionable.
+"""
+depends_on = [1, 2]
+approval_required = true
+
+[settings]
+max_threads = 3
+job_max_runtime_seconds = 90

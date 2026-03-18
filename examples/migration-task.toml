@@ -1,0 +1,14 @@
+# Batch migration: process each row in migration-batch.csv
+# Run: cse batch examples/migration-task.toml examples/migration-batch.csv results.csv
+
+[task]
+description = "Batch code migration: one agent per file"
+
+[[agents]]
+type = "worker"
+instructions = "Follow the task instructions precisely. Output only the refactored code, no explanation."
+model = "claude-opus-4-6"
+
+[settings]
+max_threads = 5
+job_max_runtime_seconds = 120
