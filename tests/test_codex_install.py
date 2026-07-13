@@ -155,6 +155,64 @@ def test_template_validation_stops_before_target_changes(
     assert not target.exists()
 
 
+@pytest.mark.parametrize(
+    ("resource", "invalid_text", "message_pattern"),
+    [
+        (
+            "agents/cse_explorer.toml",
+            "name = [\n",
+            r"Invalid TOML.*agents/cse_explorer\.toml",
+        ),
+        (
+            "agents/cse_explorer.toml",
+            (
+                codex_global.load_template("agents/cse_explorer.toml").replace(
+                    'sandbox_mode = "read-only"',
+                    'sandbox_mode = "danger-full-access"',
+                )
+            ),
+            r"cse_explorer.*invalid sandbox_mode",
+        ),
+        (
+            "config.toml",
+            codex_global.load_template("config.toml").replace(
+                "max_threads = 4", "max_threads = 5"
+            ),
+            r"config\.toml.*max_threads.*4",
+        ),
+        (
+            "AGENTS.routing.md",
+            codex_global.load_template("AGENTS.routing.md").replace(
+                codex_global.END_MARKER, ""
+            ),
+            r"AGENTS\.routing\.md.*marker pair",
+        ),
+        ("model-routing.md", "\n", r"model-routing\.md.*not be empty"),
+    ],
+)
+def test_invalid_packaged_resources_fail_before_target_creation(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    resource: str,
+    invalid_text: str,
+    message_pattern: str,
+) -> None:
+    target = tmp_path / "codex"
+    original_loader = codex_global.load_template
+
+    def invalid_loader(candidate: str) -> str:
+        if candidate == resource:
+            return invalid_text
+        return original_loader(candidate)
+
+    monkeypatch.setattr(codex_global, "load_template", invalid_loader)
+
+    with pytest.raises(codex_global.InstallValidationError, match=message_pattern):
+        codex_global.plan_install(target)
+
+    assert not target.exists()
+
+
 def test_apply_backs_up_changed_files_and_second_apply_is_noop(tmp_path: Path) -> None:
     target = tmp_path / "codex"
     target.mkdir()
@@ -174,6 +232,79 @@ def test_apply_backs_up_changed_files_and_second_apply_is_noop(tmp_path: Path) -
     second_result = codex_global.apply_plan(second_plan)
     assert second_result.changed is False
     assert second_result.backup_directory is None
+
+
+def test_apply_backup_preserves_every_changed_existing_destination(tmp_path: Path) -> None:
+    target = tmp_path / "codex"
+    originals = {
+        Path("config.toml"): b"# original config\n[agents]\nmax_threads = 8\n",
+        Path("AGENTS.md"): "user guidance: caf\u00e9\n".encode(),
+        Path("model-routing.md"): b"user-owned model routing\n",
+        Path("agents/cse_explorer.toml"): b"user-owned explorer profile\n",
+    }
+    for relative_path, content in originals.items():
+        destination = target / relative_path
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(content)
+
+    plan = codex_global.plan_install(target, force_model_routing=True)
+    result = codex_global.apply_plan(plan)
+
+    assert result.backup_directory is not None
+    backed_up_files = {
+        path.relative_to(result.backup_directory)
+        for path in result.backup_directory.rglob("*")
+        if path.is_file()
+    }
+    assert backed_up_files == set(originals)
+    for relative_path, content in originals.items():
+        assert (result.backup_directory / relative_path).read_bytes() == content
+
+
+def test_post_write_mismatch_raises_and_retains_backup(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    target = tmp_path / "codex"
+    target.mkdir()
+    original_config = b"# original\n[agents]\nmax_threads = 8\n"
+    (target / "config.toml").write_bytes(original_config)
+    plan = codex_global.plan_install(target)
+    original_atomic_write = codex_global._atomic_write
+
+    def write_then_corrupt(path: Path, content: str) -> None:
+        original_atomic_write(path, content)
+        if path.name == "config.toml":
+            path.write_text(f"{content}# post-replace corruption\n", encoding="utf-8")
+
+    monkeypatch.setattr(codex_global, "_atomic_write", write_then_corrupt)
+
+    with pytest.raises(
+        codex_global.InstallOperationalError,
+        match=r"Post-write validation mismatch for config\.toml",
+    ):
+        codex_global.apply_plan(plan)
+
+    backups = [path for path in (target / "backups").iterdir() if path.is_dir()]
+    assert len(backups) == 1
+    assert (backups[0] / "config.toml").read_bytes() == original_config
+
+
+def test_apply_rejects_stale_plan_before_backup_or_write(tmp_path: Path) -> None:
+    target = tmp_path / "codex"
+    target.mkdir()
+    config_path = target / "config.toml"
+    config_path.write_text("[agents]\nmax_threads = 8\n", encoding="utf-8")
+    plan = codex_global.plan_install(target)
+
+    changed_after_planning = "# changed after preview\n[agents]\nmax_threads = 7\n"
+    config_path.write_text(changed_after_planning, encoding="utf-8")
+
+    with pytest.raises(codex_global.InstallConflictError, match="changed after preview"):
+        codex_global.apply_plan(plan)
+
+    assert config_path.read_text(encoding="utf-8") == changed_after_planning
+    assert not (target / "backups").exists()
+    assert not (target / "AGENTS.md").exists()
 
 
 def test_apply_reports_backup_before_first_destination_write(
@@ -267,3 +398,46 @@ def test_apply_reports_atomic_replace_failure(
     with pytest.raises(codex_global.InstallOperationalError, match="atomic"):
         codex_global.apply_plan(plan)
     assert not list(target.rglob("*.tmp"))
+
+
+def test_atomic_failure_after_first_replacement_keeps_complete_backup(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    target = tmp_path / "codex"
+    originals = {
+        Path("config.toml"): b"[agents]\nmax_threads = 8\n",
+        Path("AGENTS.md"): b"user guidance\n",
+        Path("model-routing.md"): b"user model routing\n",
+        Path("agents/cse_explorer.toml"): b"user explorer\n",
+    }
+    for relative_path, content in originals.items():
+        destination = target / relative_path
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(content)
+
+    plan = codex_global.plan_install(target, force_model_routing=True)
+    original_replace = codex_global.os.replace
+    replace_count = 0
+
+    def fail_second_replace(source: Path, destination: Path) -> None:
+        nonlocal replace_count
+        replace_count += 1
+        if replace_count == 2:
+            raise OSError("simulated second replace failure")
+        original_replace(source, destination)
+
+    monkeypatch.setattr(codex_global.os, "replace", fail_second_replace)
+
+    with pytest.raises(codex_global.InstallOperationalError, match="atomically replace"):
+        codex_global.apply_plan(plan)
+
+    assert replace_count == 2
+    assert (target / "config.toml").read_text(encoding="utf-8") == plan.content_for(
+        Path("config.toml")
+    )
+    assert (target / "AGENTS.md").read_bytes() == originals[Path("AGENTS.md")]
+    assert not list(target.rglob("*.tmp"))
+    backups = [path for path in (target / "backups").iterdir() if path.is_dir()]
+    assert len(backups) == 1
+    for relative_path, content in originals.items():
+        assert (backups[0] / relative_path).read_bytes() == content
