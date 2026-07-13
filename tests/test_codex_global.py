@@ -17,7 +17,7 @@ It must:
 
 Task 2 adds native Codex routing templates that the loader must surface:
 four custom-agent profiles (cse_explorer, cse_planner,
-cse_implementer, cse_reviewer), a managed global AGENTS.md
+cse_implementer, cse_reviewer), a managed global AGENTS.routing.md
 block, a canonical model-routing.md template, and the managed
 [agents] defaults for config.toml.
 """
@@ -51,10 +51,11 @@ def test_load_template_returns_text() -> None:
 
 def test_load_missing_template_raises_actionable_error() -> None:
     """Missing templates raise CodexTemplateNotFound with the package + name."""
+    missing_resource = "missing-resource.md"
     with pytest.raises(codex_global.CodexTemplateNotFound) as excinfo:
-        codex_global.load_template("agents/does_not_exist.md")
+        codex_global.load_template(missing_resource)
     msg = str(excinfo.value)
-    assert "agents/does_not_exist.md" in msg
+    assert missing_resource in msg
     assert "templates/codex" in msg
 
 
@@ -335,14 +336,17 @@ def test_model_routing_has_required_alias_rows() -> None:
 
 
 def test_model_routing_default_alias_is_sonnet() -> None:
-    """The default model alias is exactly Codex-sonnet-4-6."""
+    """The default model alias is exactly Codex-sonnet-4-6 on a Markdown table row."""
     text = codex_global.load_template("model-routing.md")
     matched = any(
-        "default" in line.lower() and "Codex-sonnet-4-6" in line
+        "default" in line.lower()
+        and "Codex-sonnet-4-6" in line
+        and "|" in line
         for line in text.splitlines()
     )
     assert matched, (
-        "model-routing.md missing same-line 'default: Codex-sonnet-4-6' row"
+        "model-routing.md missing pipe-delimited Markdown table row "
+        "containing 'default' and 'Codex-sonnet-4-6'"
     )
 
 
