@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(
         prog="cse",
         description="Codex Subagent Engine — spawn parallel AI agents from a TOML manifest",
@@ -26,12 +26,79 @@ def main():
     batch_parser.add_argument("input_csv", help="Input CSV file (one row per task)")
     batch_parser.add_argument("output_csv", help="Output CSV file with results")
 
-    args = parser.parse_args()
+    install_parser = subparsers.add_parser(
+        "install-codex",
+        help="Preview or apply native Codex subagent routing",
+    )
+    install_parser.add_argument(
+        "--apply",
+        action="store_true",
+        help="Apply the validated plan (the default is preview only)",
+    )
+    install_parser.add_argument(
+        "--codex-home",
+        metavar="PATH",
+        help="Target Codex home (overrides CODEX_HOME and ~/.codex)",
+    )
+    install_parser.add_argument(
+        "--force-model-routing",
+        action="store_true",
+        help="Explicitly replace a differing model-routing.md",
+    )
+
+    args = parser.parse_args(argv)
 
     if args.command == "run":
         asyncio.run(_run(args))
     elif args.command == "batch":
         asyncio.run(_batch(args))
+    elif args.command == "install-codex":
+        return _install_codex(args)
+    return 0
+
+
+def _install_codex(args):
+    from src.codex_global import CodexInstallError, apply_plan, plan_install
+
+    try:
+        plan = plan_install(
+            args.codex_home,
+            force_model_routing=args.force_model_routing,
+        )
+        heading = "Apply plan" if args.apply else "Preview"
+        print(f"{heading} for Codex routing (target-relative paths):")
+        for entry in plan.entries:
+            print(f"  {entry.summary}")
+
+        if plan.conflicts:
+            conflicts = ", ".join(
+                entry.relative_path.as_posix() for entry in plan.conflicts
+            )
+            print(
+                f"Error: unresolved conflict in {conflicts}; "
+                "pass --force-model-routing only after reviewing that file.",
+                file=sys.stderr,
+            )
+            if not args.apply:
+                print("Preview complete; no files were written.")
+            return 2
+
+        if not args.apply:
+            print("Preview complete; no files were written.")
+            return 0
+
+        result = apply_plan(plan)
+        if not result.changed:
+            print("No-op: the managed Codex routing bundle is already current.")
+            return 0
+        print(f"Applied {len(result.changed_paths)} managed destination(s).")
+        if result.backup_directory is not None:
+            backup_relative = result.backup_directory.relative_to(plan.codex_home)
+            print(f"Backup: {backup_relative.as_posix()}")
+        return 0
+    except CodexInstallError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return exc.exit_code
 
 
 async def _run(args):
@@ -63,4 +130,4 @@ async def _batch(args):
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
