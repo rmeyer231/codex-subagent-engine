@@ -1,8 +1,8 @@
 # Model Routing
 
 This file maps workflow phases to recommended model identifiers for the
-active Codex session. It is the canonical reference for the global CSE
-routing policy in `~/.codex/AGENTS.routing.md`.
+active Codex session. It is the canonical reference for the CSE managed
+block installed into `~/.codex/AGENTS.md`.
 
 Repository-local AGENTS.md rules win over this file; this file wins over the
 CSE managed routing block when the two disagree on a phase assignment.

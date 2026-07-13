@@ -1,9 +1,15 @@
 <!-- BEGIN CSE-MANAGED -->
 <!--
-  Managed routing source for global Codex native subagent routing.
-  Edit only by re-running the cse install-codex installer with an explicit
-  --apply. The installer copies this file to ~/.codex/AGENTS.routing.md
-  and inserts a managed block into the user's AGENTS.md that points at it.
+  Packaged source for the CSE managed routing block.
+
+  This file is the packaged source filename shipped inside the distribution
+  wheel. Codex does NOT auto-discover it; the standalone global instructions
+  Codex auto-discovers are ~/.codex/AGENTS.override.md and ~/.codex/AGENTS.md.
+
+  The cse install-codex installer (Task 3) reads the managed block between
+  the BEGIN/END markers in this source and inserts it into ~/.codex/AGENTS.md,
+  which is the auto-discovery destination for global instructions. This file
+  itself is never copied to ~/.codex/AGENTS.routing.md.
 -->
 
 # CSE Native Subagent Routing
@@ -69,11 +75,18 @@ permitted only when write sets are disjoint AND there is no ordering
 dependency. The configured max_threads = 4 cap is the upper bound on
 concurrent open agents, not a target.
 
-## Canonical path
+## Packaged source vs. installed destination
 
-This file is the managed routing source. The installer copies it to the
-canonical lowercase path `~/.codex/AGENTS.routing.md` so repository-local
-guidance and the global managed AGENTS block can both reference it by the
-same path on every machine.
+This file is the **packaged source** for the CSE managed routing block
+inside the distribution wheel. Its filename (`AGENTS.routing.md`) is
+preserved so the source can be tracked, reviewed, and re-rendered by the
+installer.
+
+The installed destination for the managed block is `~/.codex/AGENTS.md`,
+which Codex auto-discovers as global instructions (alongside the
+optional `~/.codex/AGENTS.override.md`). The installer extracts the
+managed block from this packaged source and inserts it into
+`~/.codex/AGENTS.md`; nothing in this bundle is written to
+`~/.codex/AGENTS.routing.md`.
 
 <!-- END CSE-MANAGED -->

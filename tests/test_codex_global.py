@@ -284,12 +284,47 @@ def test_routing_source_enforces_parallel_write_isolation() -> None:
     assert "serial" in text or "one owner" in text or "serializ" in text
 
 
-def test_routing_source_references_canonical_path() -> None:
-    """The routing source declares the canonical lowercase ~/.codex/AGENTS.routing.md path."""
+def test_routing_source_does_not_advertise_routing_path_destination() -> None:
+    """The routing source does not claim to be installed at ~/.codex/AGENTS.routing.md."""
     text = codex_global.load_template(ROUTING_SOURCE_NAME)
-    assert ROUTING_SOURCE_CANONICAL_PATH in text, (
-        f"routing source must declare canonical path "
-        f"{ROUTING_SOURCE_CANONICAL_PATH!r}"
+    forbidden_phrases = (
+        "copy this file to ~/.codex/AGENTS.routing.md",
+        "copies it to ~/.codex/AGENTS.routing.md",
+        "install this file at ~/.codex/AGENTS.routing.md",
+        "destination ~/.codex/AGENTS.routing.md",
+        "writes this file to ~/.codex/AGENTS.routing.md",
+    )
+    lowered = text.lower()
+    for phrase in forbidden_phrases:
+        assert phrase.lower() not in lowered, (
+            f"routing source must not advertise itself as an installed file "
+            f"at ~/.codex/AGENTS.routing.md; found forbidden phrase: {phrase!r}"
+        )
+
+
+def test_routing_source_declares_itself_packaged_source() -> None:
+    """The routing source explicitly states it is the packaged source for the managed block."""
+    text = codex_global.load_template(ROUTING_SOURCE_NAME).lower()
+    assert "packaged source" in text, (
+        "routing source must declare itself the 'packaged source' for "
+        "the managed block"
+    )
+    # Managed block is inserted into the user's AGENTS.md, not AGENTS.routing.md.
+    assert "~/.codex/agents.md" in text, (
+        "routing source must reference ~/.codex/AGENTS.md as the "
+        "auto-discovery destination"
+    )
+
+
+def test_model_routing_references_agents_md_destination() -> None:
+    """The model-routing.md template references the CSE managed block in ~/.codex/AGENTS.md."""
+    text = codex_global.load_template("model-routing.md")
+    assert "~/.codex/AGENTS.md" in text, (
+        "model-routing.md must reference the CSE managed block in ~/.codex/AGENTS.md"
+    )
+    assert "~/.codex/AGENTS.routing.md" not in text, (
+        "model-routing.md must not reference ~/.codex/AGENTS.routing.md; "
+        "AGENTS.routing.md is the packaged source, not an installed destination"
     )
 
 
@@ -369,4 +404,6 @@ def test_config_template_agents_defaults() -> None:
     assert int(agents["max_depth"]) == 1
     assert int(agents["job_max_runtime_seconds"]) == 1800
     assert bool(agents["interrupt_message"]) is True
+
+
 
