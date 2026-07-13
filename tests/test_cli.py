@@ -33,6 +33,7 @@ def test_install_codex_apply_writes_bundle(capsys, tmp_path: Path) -> None:
     captured = capsys.readouterr()
     assert exit_code == 0
     assert "Applied" in captured.out
+    assert "Backup:" not in captured.out
     assert (target / "config.toml").is_file()
     assert (target / "agents/cse_reviewer.toml").is_file()
 

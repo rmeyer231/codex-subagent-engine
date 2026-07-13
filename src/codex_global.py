@@ -570,7 +570,14 @@ def apply_plan(
 
     backup = _create_backup(plan)
     if backup is not None and backup_reporter is not None:
-        backup_reporter(backup)
+        try:
+            backup_reporter(backup)
+        except Exception as exc:
+            backup_relative = backup.relative_to(plan.codex_home).as_posix()
+            raise InstallOperationalError(
+                f"Backup created at target-relative {backup_relative}, but its reporter "
+                f"failed ({type(exc).__name__}); no destination writes were attempted"
+            ) from None
     for entry in plan.changes:
         _atomic_write(plan.codex_home / entry.relative_path, plan.rendered[entry.relative_path])
     _post_write_validate(plan)

@@ -204,6 +204,42 @@ def test_apply_reports_backup_before_first_destination_write(
     assert events[1][0] == "write"
 
 
+def test_apply_wraps_backup_reporter_failure_before_any_destination_write(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    target = tmp_path / "codex"
+    target.mkdir()
+    original_config = "[agents]\nmax_threads = 8\n"
+    (target / "config.toml").write_text(original_config, encoding="utf-8")
+    plan = codex_global.plan_install(target)
+    reported_backups: list[Path] = []
+    writes: list[Path] = []
+
+    def fail_reporter(backup: Path) -> None:
+        reported_backups.append(backup)
+        raise RuntimeError(f"secret callback detail under {target}")
+
+    monkeypatch.setattr(
+        codex_global,
+        "_atomic_write",
+        lambda path, content: writes.append(path),
+    )
+
+    with pytest.raises(codex_global.InstallOperationalError) as excinfo:
+        codex_global.apply_plan(plan, backup_reporter=fail_reporter)
+
+    assert len(reported_backups) == 1
+    backup = reported_backups[0]
+    assert backup.is_dir()
+    assert (backup / "config.toml").read_text(encoding="utf-8") == original_config
+    assert writes == []
+    message = str(excinfo.value)
+    assert "backups/cse-" in message
+    assert str(target) not in message
+    assert "secret callback detail" not in message
+    assert excinfo.value.__cause__ is None
+
+
 def test_apply_refuses_conflict_before_creating_backup(tmp_path: Path) -> None:
     target = tmp_path / "codex"
     target.mkdir()
