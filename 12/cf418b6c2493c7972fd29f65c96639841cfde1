@@ -1,0 +1,21 @@
+tests/test_codex_global.py
+  s_824b09d9c08577::t_ce1f8e7b6b7a13 205-212,216-217
+openspec/changes/global-codex-subagent-routing/design.md
+  s_824b09d9c08577::t_d063406cd243cf 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "12cf418b6c2493c7972fd29f65c96639841cfde1",
+  "prompts": {},
+  "sessions": {
+    "s_824b09d9c08577": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "35ba62b4-b5b3-4e26-857c-743594bdc260",
+        "model": "anthropic/claude-sonnet-5"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
