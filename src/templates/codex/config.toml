@@ -1,0 +1,9 @@
+# Managed by cse install-codex (Task 2).
+# Unrelated keys, comments, rules, prompts, and skills are preserved on rerun.
+# Per-section managed keys are documented inline below.
+
+[agents]
+max_threads = 4
+max_depth = 1
+job_max_runtime_seconds = 1800
+interrupt_message = true
