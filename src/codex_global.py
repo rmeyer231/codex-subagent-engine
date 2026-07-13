@@ -260,6 +260,16 @@ def _parse_toml(text: str, label: str) -> tomlkit.TOMLDocument:
         raise InstallValidationError(f"Invalid TOML in {label}: {exc}") from exc
 
 
+def _setting_has_expected_type(value: object, expected: int | bool) -> bool:
+    if isinstance(expected, bool):
+        return isinstance(value, bool)
+    return isinstance(value, int) and not isinstance(value, bool)
+
+
+def _setting_type_name(expected: int | bool) -> str:
+    return "boolean" if isinstance(expected, bool) else "integer"
+
+
 def _load_validated_templates() -> dict[Path, str]:
     """Load and validate every packaged source before target inspection."""
     try:
@@ -277,7 +287,13 @@ def _load_validated_templates() -> dict[Path, str]:
     if not isinstance(agents_settings, Mapping):
         raise InstallValidationError("Packaged config.toml is missing the [agents] table")
     for key, expected in MANAGED_AGENT_SETTINGS.items():
-        if agents_settings.get(key) != expected:
+        actual = agents_settings.get(key)
+        if not _setting_has_expected_type(actual, expected):
+            raise InstallValidationError(
+                f"Packaged config.toml [agents].{key} must be a TOML "
+                f"{_setting_type_name(expected)}"
+            )
+        if actual != expected:
             raise InstallValidationError(
                 f"Packaged config.toml [agents].{key} must equal {expected!r}"
             )
@@ -317,15 +333,17 @@ def _validate_agent_document(
     doc: tomlkit.TOMLDocument, name: str, label_prefix: str
 ) -> None:
     for field in ("name", "description", "developer_instructions", "sandbox_mode"):
-        if field not in doc or not str(doc[field]).strip():
+        value = doc.get(field)
+        if not isinstance(value, str) or not value.strip():
             raise InstallValidationError(
-                f"{label_prefix} agent {name} is missing required field {field!r}"
+                f"{label_prefix} agent {name} required field {field!r} "
+                "must be a non-empty string"
             )
-    if str(doc["name"]) != name:
+    if doc["name"] != name:
         raise InstallValidationError(
             f"{label_prefix} agent {name} declares mismatched name {doc['name']!r}"
         )
-    if str(doc["sandbox_mode"]) != EXPECTED_SANDBOXES[name]:
+    if doc["sandbox_mode"] != EXPECTED_SANDBOXES[name]:
         raise InstallValidationError(
             f"{label_prefix} agent {name} has invalid sandbox_mode {doc['sandbox_mode']!r}"
         )
@@ -444,7 +462,13 @@ def _validate_rendered_bundle(
     if not isinstance(agents, Mapping):
         raise InstallValidationError("Rendered config.toml is missing [agents]")
     for key, expected_value in MANAGED_AGENT_SETTINGS.items():
-        if agents.get(key) != expected_value:
+        actual_value = agents.get(key)
+        if not _setting_has_expected_type(actual_value, expected_value):
+            raise InstallValidationError(
+                f"Rendered config.toml [agents].{key} must be a TOML "
+                f"{_setting_type_name(expected_value)}"
+            )
+        if actual_value != expected_value:
             raise InstallValidationError(
                 f"Rendered config.toml [agents].{key} does not match the managed value"
             )

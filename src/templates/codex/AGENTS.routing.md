@@ -42,6 +42,8 @@ dispatching work from the next phase it MUST wait for:
 3. Reviewer findings to be triaged and either accepted (open issues for the
    implementer) or rejected (with rationale).
 
+The root thread MUST consult ~/.codex/model-routing.md before selecting a phase model.
+
 Subagents MUST NOT advance to the next phase on their own; they report and
 return. The root thread is the only place where the final answer is
 synthesized and the work is claimed complete.

@@ -156,6 +156,84 @@ def test_template_validation_stops_before_target_changes(
 
 
 @pytest.mark.parametrize(
+    ("field", "invalid_value"),
+    [
+        (field, invalid_value)
+        for field in ("name", "description", "developer_instructions", "sandbox_mode")
+        for invalid_value in (["not-a-string"], 7, True)
+    ],
+)
+def test_agent_required_fields_must_be_non_empty_strings(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    field: str,
+    invalid_value: object,
+) -> None:
+    target = tmp_path / "codex"
+    original_loader = codex_global.load_template
+    invalid_doc = codex_global._parse_toml(
+        original_loader("agents/cse_explorer.toml"),
+        "test agent profile",
+    )
+    invalid_doc[field] = invalid_value
+
+    def invalid_loader(resource: str) -> str:
+        if resource == "agents/cse_explorer.toml":
+            return invalid_doc.as_string()
+        return original_loader(resource)
+
+    monkeypatch.setattr(codex_global, "load_template", invalid_loader)
+
+    with pytest.raises(
+        codex_global.InstallValidationError,
+        match=rf"{field}.*non-empty string",
+    ):
+        codex_global.plan_install(target)
+
+    assert not target.exists()
+
+
+@pytest.mark.parametrize(
+    ("setting", "invalid_value", "expected_type"),
+    [
+        ("max_threads", True, "integer"),
+        ("max_depth", True, "integer"),
+        ("job_max_runtime_seconds", True, "integer"),
+        ("interrupt_message", 1, "boolean"),
+    ],
+)
+def test_managed_agent_settings_require_exact_toml_types(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    setting: str,
+    invalid_value: object,
+    expected_type: str,
+) -> None:
+    target = tmp_path / "codex"
+    original_loader = codex_global.load_template
+    invalid_doc = codex_global._parse_toml(
+        original_loader("config.toml"),
+        "test config",
+    )
+    invalid_doc["agents"][setting] = invalid_value
+
+    def invalid_loader(resource: str) -> str:
+        if resource == "config.toml":
+            return invalid_doc.as_string()
+        return original_loader(resource)
+
+    monkeypatch.setattr(codex_global, "load_template", invalid_loader)
+
+    with pytest.raises(
+        codex_global.InstallValidationError,
+        match=rf"{setting}.*{expected_type}",
+    ):
+        codex_global.plan_install(target)
+
+    assert not target.exists()
+
+
+@pytest.mark.parametrize(
     ("resource", "invalid_text", "message_pattern"),
     [
         (

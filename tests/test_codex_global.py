@@ -269,6 +269,15 @@ def test_routing_source_requires_root_owned_phase_gates() -> None:
     assert "synthes" in text
 
 
+def test_routing_source_requires_root_to_consult_canonical_model_routing() -> None:
+    """The installed block directs root phase/model selection to the canonical file."""
+    text = codex_global.load_template(ROUTING_SOURCE_NAME)
+    assert (
+        "root thread MUST consult ~/.codex/model-routing.md before selecting "
+        "a phase model"
+    ) in text
+
+
 def test_routing_source_states_non_delegation_criteria() -> None:
     """The source enumerates when NOT to delegate (trivial/sequential work)."""
     text = codex_global.load_template(ROUTING_SOURCE_NAME).lower()
@@ -406,6 +415,5 @@ def test_config_template_agents_defaults() -> None:
     assert int(agents["max_depth"]) == 1
     assert int(agents["job_max_runtime_seconds"]) == 1800
     assert bool(agents["interrupt_message"]) is True
-
 
 
