@@ -34,4 +34,4 @@
 - [x] 5.2 Run the full test suite and Ruff checks, recording passing evidence and resolving any regressions before global installation.
 - [x] 5.3 Run preview and apply against a temporary `CODEX_HOME`, compare the complete before/after file set, and verify a second apply is a no-op.
 - [x] 5.4 Run `openspec validate global-codex-subagent-routing` and resolve every schema or scenario error.
-- [ ] 5.5 After separate approval for external writes, preview the real `~/.codex` change, apply it, restart Codex, and validate one read-only delegated canary through the native agent UI.
+- [x] 5.5 After separate approval for external writes, preview the real `~/.codex` change, apply it, restart Codex, and validate one read-only delegated canary through the native agent UI.
