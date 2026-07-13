@@ -1,6 +1,8 @@
 """Tests for manifest parsing."""
 
+import pytest
 from src.manifest import Manifest
+
 
 SAMPLE_TOML = """
 [task]

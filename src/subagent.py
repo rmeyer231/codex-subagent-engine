@@ -10,11 +10,9 @@ Subagents are stateless — all context must be passed in explicitly.
 """
 
 from __future__ import annotations
-
 import os
 from dataclasses import dataclass
 from enum import Enum
-
 import anthropic
 
 from .manifest import AgentConfig

@@ -9,11 +9,9 @@ changes, the human reviews, and only approved changes are applied.
 """
 
 from __future__ import annotations
-
 import difflib
 from dataclasses import dataclass
 from enum import Enum
-
 from rich.console import Console
 from rich.panel import Panel
 from rich.syntax import Syntax

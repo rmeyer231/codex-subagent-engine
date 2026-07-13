@@ -21,7 +21,6 @@ Manifest format:
 """
 
 from __future__ import annotations
-
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -51,7 +50,7 @@ class Manifest:
     settings: Settings
 
     @classmethod
-    def from_file(cls, path: str | Path) -> Manifest:
+    def from_file(cls, path: str | Path) -> "Manifest":
         data = tomllib.loads(Path(path).read_text())
 
         task = data.get("task", {})
@@ -80,7 +79,7 @@ class Manifest:
         return cls(description=description, agents=agents, settings=settings)
 
     @classmethod
-    def from_string(cls, toml_str: str) -> Manifest:
+    def from_string(cls, toml_str: str) -> "Manifest":
         path = Path("/tmp/_cse_manifest.toml")
         path.write_text(toml_str)
         return cls.from_file(path)

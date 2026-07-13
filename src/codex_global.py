@@ -3,7 +3,7 @@
 The global Codex routing bundle (installed by ``cse install-codex``, added
 in a later task) renders agent profiles, AGENTS routing guidance, and
 the model-routing document from templates that ship inside the
-distribution wheel under ``src/codex_global/data/``.
+distribution wheel under ``src/templates/codex/``.
 
 This module is the single read-side interface to those packaged
 resources. Keeping every read behind :func:`load_template` lets the
@@ -22,8 +22,8 @@ from importlib.resources import files as _resource_files
 from pathlib import Path
 from typing import Final
 
-_PACKAGE_DOTTED: Final[str] = "src.codex_global"
-_DATA_SUBDIR: Final[str] = "data"
+_PACKAGE_PARENT: Final[str] = "src"
+_DATA_SUBDIR: Final[str] = "templates/codex"
 
 
 class CodexTemplateNotFound(FileNotFoundError):
@@ -38,24 +38,20 @@ class CodexTemplateNotFound(FileNotFoundError):
         self.package_data_root = package_data_root
         super().__init__(
             f"Packaged Codex template '{resource}' not found under "
-            f"'{package_data_root}' (package '{_PACKAGE_DOTTED}'). "
+            f"'{package_data_root}' (package '{_PACKAGE_PARENT}', "
+            f"subdirectory '{_DATA_SUBDIR}'). "
             "The distribution may be corrupt or incomplete."
         )
-
-
-def _package_directory() -> Path:
-    """Return the filesystem directory that contains ``codex_global.py``."""
-    return Path(__file__).resolve().parent
 
 
 def package_data_root() -> Path:
     """Return the on-disk path to the packaged Codex data directory.
 
-    The data directory lives next to ``codex_global.py`` inside the
-    ``codex_global`` package so Hatch ships it in the wheel via the
+    The data directory lives at ``src/templates/codex/`` inside the
+    ``src`` package so Hatch ships it in the wheel via the
     ``include`` rule in ``pyproject.toml``.
     """
-    return _package_directory() / _DATA_SUBDIR
+    return Path(__file__).resolve().parent / _DATA_SUBDIR
 
 
 def _validate_resource_name(resource: str) -> str:
@@ -111,14 +107,18 @@ def load_template(resource: str) -> str:
     root = package_data_root()
     candidate = root.joinpath(name)
 
+    # Direct filesystem path first — covers editable installs and most
+    # wheel installs. When the on-disk path is unavailable (read-only
+    # install root, zipapp, etc.) fall back to importlib.resources so
+    # the wheel's recorded layout is consulted.
     try:
         if candidate.is_file():
             return candidate.read_text(encoding="utf-8")
     except OSError:
-        # Fall through to importlib.resources lookup for zipapp-style installs.
+        # Fall through to the importlib.resources lookup below.
         pass
 
-    traversable = _resource_files(_PACKAGE_DOTTED).joinpath(_DATA_SUBDIR, name)
+    traversable = _resource_files(_PACKAGE_PARENT).joinpath(_DATA_SUBDIR, name)
     if traversable.is_file():
         return traversable.read_text(encoding="utf-8")
 

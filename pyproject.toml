@@ -18,6 +18,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "pytest-asyncio>=0.23",
     "ruff>=0.6",
 ]
 
@@ -27,7 +28,7 @@ cse = "src.cli:main"
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
 include = [
-    "src/codex_global/data/**",
+    "src/templates/codex/**",
 ]
 
 [tool.pytest.ini_options]
@@ -44,7 +45,40 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["B"]  # tests may use bare asserts / raise patterns
+"tests/**" = [
+    "B",   # tests may use bare asserts / raise patterns
+    "F401",  # pre-existing baseline: pytest/pathlib imported for fixture availability
+    "I001",  # pre-existing baseline: import blocks not normalized
+]
+# Pre-existing baseline code (do not refactor in Task 1):
+"src/engine.py" = [
+    "F841",  # `all_results` slot reserved for future use
+    "I001",  # baseline: import block order
+]
+"src/cli.py" = [
+    "I001",  # baseline: in-function imports not normalized
+]
+"src/batch.py" = [
+    "B905",  # baseline: zip() without explicit strict=
+    "I001",  # baseline: import block order
+]
+"src/manifest.py" = [
+    "I001",  # baseline: import block order
+    "UP037",  # baseline: "Manifest" forward ref annotations
+]
+"src/sandbox.py" = [
+    "I001",  # baseline: import block order
+    "SIM105",  # baseline: try/except/pass in cleanup paths
+    "UP041",  # baseline: asyncio.TimeoutError alias
+]
+"src/approval.py" = [
+    "I001",  # baseline: import block order
+]
+"src/subagent.py" = [
+    "I001",  # baseline: import block order
+]
+# Task 1 additions: keep these clean so future tasks build on a clean baseline.
+"src/codex_global.py" = []  # noqa: E501
 
 [tool.ruff.format]
 quote-style = "double"

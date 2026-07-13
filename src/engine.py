@@ -10,18 +10,17 @@ The engine:
 """
 
 from __future__ import annotations
-
 import asyncio
 from dataclasses import dataclass, field
 
 from rich.console import Console
-from rich.panel import Panel
 from rich.table import Table
+from rich.panel import Panel
 
-from .approval import ApprovalRequest, Decision, request_approval
+from .manifest import Manifest, AgentConfig
+from .subagent import run_subagent, SubagentResult, SubagentStatus
+from .approval import request_approval, ApprovalRequest, Decision
 from .batch import BatchItem, load_batch, save_batch_results
-from .manifest import AgentConfig, Manifest
-from .subagent import SubagentResult, SubagentStatus, run_subagent
 
 console = Console()
 
