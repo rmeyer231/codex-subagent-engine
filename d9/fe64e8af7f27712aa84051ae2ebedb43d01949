@@ -1,0 +1,21 @@
+tests/test_codex_global.py
+  s_824b09d9c08577::t_9d89497a0b5f0a 54,56,58
+  s_824b09d9c08577::t_d6bd81eb3b8f2b 339,342-344,348-349
+  s_824b09d9c08577::t_1a56211f0508c5 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "d9fe64e8af7f27712aa84051ae2ebedb43d01949",
+  "prompts": {},
+  "sessions": {
+    "s_824b09d9c08577": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "35ba62b4-b5b3-4e26-857c-743594bdc260",
+        "model": "anthropic/claude-sonnet-5"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
