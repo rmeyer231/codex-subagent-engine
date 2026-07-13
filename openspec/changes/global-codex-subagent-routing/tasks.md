@@ -6,10 +6,10 @@
 
 ## Task 2: Native Codex Routing Bundle
 
-- [ ] 2.1 Add schema-valid templates for `cse_explorer`, `cse_planner`, `cse_implementer`, and `cse_reviewer` with the specified permission boundaries and parent-model inheritance.
-- [ ] 2.2 Add the managed global AGENTS routing block with deterministic role selection, phase-gate ownership, non-delegation criteria, result synthesis, and parallel write isolation.
-- [ ] 2.3 Add the canonical lowercase `model-routing.md` template from the supplied phase table without pinning unverified model identifiers in agent TOML.
-- [ ] 2.4 Add the managed `[agents]` defaults for four threads, depth one, 1800-second CSV worker runtime, and visible interruption messages.
+- [x] 2.1 Add schema-valid templates for `cse_explorer`, `cse_planner`, `cse_implementer`, and `cse_reviewer` with the specified permission boundaries and parent-model inheritance.
+- [x] 2.2 Add the managed global AGENTS routing block with deterministic role selection, phase-gate ownership, non-delegation criteria, result synthesis, and parallel write isolation.
+- [x] 2.3 Add the canonical lowercase `model-routing.md` template from the supplied phase table without pinning unverified model identifiers in agent TOML.
+- [x] 2.4 Add the managed `[agents]` defaults for four threads, depth one, 1800-second CSV worker runtime, and visible interruption messages.
 
 ## Task 3: Safe Global Installer
 
