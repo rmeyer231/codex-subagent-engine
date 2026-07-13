@@ -35,8 +35,8 @@ def main():
 
 
 async def _run(args):
-    from src.manifest import Manifest
     from src.engine import Engine
+    from src.manifest import Manifest
 
     if not Path(args.manifest).exists():
         print(f"Error: manifest not found: {args.manifest}", file=sys.stderr)
@@ -54,8 +54,8 @@ async def _run(args):
 
 
 async def _batch(args):
-    from src.manifest import Manifest
     from src.engine import Engine
+    from src.manifest import Manifest
 
     manifest = Manifest.from_file(args.manifest)
     engine = Engine(manifest)

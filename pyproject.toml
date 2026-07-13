@@ -12,15 +12,40 @@ license = {text = "MIT"}
 dependencies = [
     "anthropic>=0.40.0",
     "rich>=13.0",
+    "tomlkit>=0.13",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "ruff>=0.6",
 ]
 
 [project.scripts]
 cse = "src.cli:main"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+include = [
+    "src/codex_global/data/**",
+]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = [
+    "E501",  # line length handled by formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["B"]  # tests may use bare asserts / raise patterns
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

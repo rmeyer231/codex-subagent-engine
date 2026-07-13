@@ -8,6 +8,7 @@ Sandboxed subagents run in a subprocess with:
 """
 
 from __future__ import annotations
+
 import asyncio
 import os
 import sys
@@ -60,7 +61,7 @@ async def run_sandboxed(
             stdout=stdout.decode(errors="replace"),
             stderr=stderr.decode(errors="replace"),
         )
-    except asyncio.TimeoutError:
+    except TimeoutError:
         try:
             proc.kill()
         except Exception:
