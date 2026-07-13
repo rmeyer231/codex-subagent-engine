@@ -1,0 +1,56 @@
+.codex/skills/openspec-continue-change/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-122
+openspec/changes/global-codex-subagent-routing/proposal.md
+  s_2d980dd73b0f71::t_528c089691ed99 1-30
+.gitignore
+  s_2d980dd73b0f71::t_d0cc7d0f4c5e84 11-12
+.codex/skills/openspec-archive-change/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-118
+.codex/skills/openspec-new-change/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-77
+.codex/skills/openspec-propose/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-114
+.codex/skills/openspec-verify-change/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-172
+.codex/skills/openspec-ff-change/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-105
+openspec/changes/global-codex-subagent-routing/specs/codex-global-installation/spec.md
+  s_2d980dd73b0f71::t_1c7e75ff109f0a 1-70
+openspec/config.yaml
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-20
+openspec/changes/global-codex-subagent-routing/.openspec.yaml
+  s_2d980dd73b0f71::t_8a295e17646794 1-2
+openspec/changes/global-codex-subagent-routing/design.md
+  s_2d980dd73b0f71::t_1c7e75ff109f0a 1-86
+.codex/skills/openspec-bulk-archive-change/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-249
+.codex/skills/openspec-sync-specs/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-148
+openspec/changes/global-codex-subagent-routing/specs/codex-subagent-routing/spec.md
+  s_2d980dd73b0f71::t_1c7e75ff109f0a 1-74
+.codex/skills/openspec-explore/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-290
+.codex/skills/openspec-apply-change/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-160
+openspec/changes/global-codex-subagent-routing/tasks.md
+  s_2d980dd73b0f71::t_d0cc7d0f4c5e84 1,7,14,23,31
+  s_2d980dd73b0f71::t_5b68fbe116a9c9 2-6,8-13,15-22,24-30,32-37
+.codex/skills/openspec-onboard/SKILL.md
+  s_2d980dd73b0f71::t_12e26c1af0d2cd 1-555
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "0ad9f0bd6d52224ba315fa4c018aa230b688d4b9",
+  "prompts": {},
+  "sessions": {
+    "s_2d980dd73b0f71": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f5cf9-9cad-7471-b63a-e4fda6f1b868",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
