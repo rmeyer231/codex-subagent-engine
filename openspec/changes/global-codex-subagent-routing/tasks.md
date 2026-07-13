@@ -13,12 +13,12 @@
 
 ## Task 3: Safe Global Installer
 
-- [ ] 3.1 Implement Codex-home resolution using `--codex-home`, then `CODEX_HOME`, then `~/.codex`, and build a deterministic installation plan without writing.
-- [ ] 3.2 Implement comment-preserving `[agents]` TOML updates that modify only managed keys and preserve unrelated configuration.
-- [ ] 3.3 Implement managed-block updates for `AGENTS.md` and non-destructive creation or explicit-force replacement for `model-routing.md`.
-- [ ] 3.4 Implement template validation for TOML syntax, required agent fields, permissions, concurrency values, routing markers, and model-routing presence.
-- [ ] 3.5 Implement timestamped backups, same-directory atomic replacement, no-op detection, and post-write validation.
-- [ ] 3.6 Add `cse install-codex` with preview-only default behavior, explicit `--apply`, `--codex-home`, and force semantics plus actionable exit codes and redacted output.
+- [x] 3.1 Implement Codex-home resolution using `--codex-home`, then `CODEX_HOME`, then `~/.codex`, and build a deterministic installation plan without writing.
+- [x] 3.2 Implement comment-preserving `[agents]` TOML updates that modify only managed keys and preserve unrelated configuration.
+- [x] 3.3 Implement managed-block updates for `AGENTS.md` and non-destructive creation or explicit-force replacement for `model-routing.md`.
+- [x] 3.4 Implement template validation for TOML syntax, required agent fields, permissions, concurrency values, routing markers, and model-routing presence.
+- [x] 3.5 Implement timestamped backups, same-directory atomic replacement, no-op detection, and post-write validation.
+- [x] 3.6 Add `cse install-codex` with preview-only default behavior, explicit `--apply`, `--codex-home`, and force semantics plus actionable exit codes and redacted output.
 
 ## Task 4: Automated Validation
 
