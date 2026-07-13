@@ -22,11 +22,11 @@
 
 ## Task 4: Automated Validation
 
-- [ ] 4.1 Test all four agent profiles for required schema, distinct non-built-in names, sandbox defaults, and omitted model pins.
-- [ ] 4.2 Test preview mode, Codex-home precedence, invalid templates, and confirmation that preview performs no writes.
-- [ ] 4.3 Test preservation of TOML comments and unrelated keys, preservation of global AGENTS prose, managed-block replacement, and model-routing force behavior.
-- [ ] 4.4 Test backup contents, atomic-write failure handling, post-write validation, and idempotent second application.
-- [ ] 4.5 Add CLI tests for `install-codex` and rerun existing `run`, `batch`, manifest, and batch tests to prove compatibility.
+- [x] 4.1 Test all four agent profiles for required schema, distinct non-built-in names, sandbox defaults, and omitted model pins.
+- [x] 4.2 Test preview mode, Codex-home precedence, invalid templates, and confirmation that preview performs no writes.
+- [x] 4.3 Test preservation of TOML comments and unrelated keys, preservation of global AGENTS prose, managed-block replacement, and model-routing force behavior.
+- [x] 4.4 Test backup contents, atomic-write failure handling, post-write validation, and idempotent second application.
+- [x] 4.5 Add CLI tests for `install-codex` and rerun existing `run`, `batch`, manifest, and batch tests to prove compatibility.
 
 ## Task 5: Documentation and Release Checks
 
