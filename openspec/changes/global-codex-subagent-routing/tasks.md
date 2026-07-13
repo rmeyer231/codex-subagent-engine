@@ -1,8 +1,8 @@
 ## Task 1: Baseline and Packaging
 
-- [ ] 1.1 Restore jCodemunch access or document the approved source-based caller map for `src.cli:main`, then capture baseline `run`, `batch`, manifest, and batch test behavior.
-- [ ] 1.2 Add `tomlkit` as a runtime dependency plus `ruff` as a development dependency, configure linting, and configure Hatch to package the Codex template resources.
-- [ ] 1.3 Add a resource-loading layer for the routing templates and tests that fail clearly when a packaged template is missing.
+- [x] 1.1 Restore jCodemunch access or document the approved source-based caller map for `src.cli:main`, then capture baseline `run`, `batch`, manifest, and batch test behavior.
+- [x] 1.2 Add `tomlkit` as a runtime dependency plus `ruff` as a development dependency, configure linting, and configure Hatch to package the Codex template resources.
+- [x] 1.3 Add a resource-loading layer for the routing templates and tests that fail clearly when a packaged template is missing.
 
 ## Task 2: Native Codex Routing Bundle
 
