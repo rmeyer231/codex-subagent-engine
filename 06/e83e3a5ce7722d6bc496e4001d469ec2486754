@@ -1,0 +1,33 @@
+src/templates/codex/config.toml
+  s_824b09d9c08577::t_4d579d4e5d3a17 1-9
+src/templates/codex/model-routing.md
+  s_824b09d9c08577::t_2faf415c210442 1-35
+src/templates/codex/agents/cse_reviewer.toml
+  s_824b09d9c08577::t_95b7fb0fdd171f 1-31
+tests/test_codex_global.py
+  s_824b09d9c08577::t_7252c95dd41096 13,17-22,30,35-37,71,78-273
+src/templates/codex/agents/AGENTS.md
+  s_824b09d9c08577::t_e9615af920ebdb 2-78
+src/templates/codex/agents/cse_explorer.toml
+  s_824b09d9c08577::t_ddbee3eb2625ed 1-31
+src/templates/codex/agents/cse_implementer.toml
+  s_824b09d9c08577::t_79c84de8502b30 1-37
+src/templates/codex/agents/cse_planner.toml
+  s_824b09d9c08577::t_a8f3681845fc67 1-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "06e83e3a5ce7722d6bc496e4001d469ec2486754",
+  "prompts": {},
+  "sessions": {
+    "s_824b09d9c08577": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "35ba62b4-b5b3-4e26-857c-743594bdc260",
+        "model": "anthropic/claude-sonnet-5"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
