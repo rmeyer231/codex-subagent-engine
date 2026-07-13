@@ -202,17 +202,19 @@ def test_agent_profiles_distinct_names() -> None:
 
 # --- Managed global AGENTS routing source -----------------------------------
 
-# Canonical path for the managed routing source installed into the user's
-# ~/.codex directory. The installer (Task 3) copies this file to
-# ~/.codex/AGENTS.routing.md and inserts a managed block into AGENTS.md
-# that references it. There must be no agents/AGENTS.md template shipped
-# in the bundle (that file was the placeholder from Task 1).
+# Packaged-source filename for the CSE managed routing block.
+# AGENTS.routing.md is the packaged source shipped inside the distribution
+# wheel; it is NOT a Codex auto-discovery target. The installer (Task 3)
+# extracts the managed block from this source and inserts it into
+# ~/.codex/AGENTS.md (Codex auto-discovers ~/.codex/AGENTS.override.md if
+# non-empty, otherwise ~/.codex/AGENTS.md). The packaged source itself is
+# never copied to ~/.codex/AGENTS.routing.md. The legacy agents/AGENTS.md
+# placeholder from Task 1 is also removed from the bundle.
 ROUTING_SOURCE_NAME = "AGENTS.routing.md"
-ROUTING_SOURCE_CANONICAL_PATH = "~/.codex/AGENTS.routing.md"
 
 
-def test_routing_source_exists_at_canonical_path() -> None:
-    """The managed routing source lives at the exact canonical template path."""
+def test_routing_source_resource_loads_from_packaged_path() -> None:
+    """The packaged source resource loads from the bundled AGENTS.routing.md path."""
     text = codex_global.load_template(ROUTING_SOURCE_NAME)
     assert isinstance(text, str)
     assert text.strip(), "AGENTS.routing.md template should not be empty"

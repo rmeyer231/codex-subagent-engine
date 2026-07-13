@@ -1,6 +1,6 @@
 ## Context
 
-Codex supports personal custom agents under `~/.codex/agents/`, global subagent limits under `[agents]` in `~/.codex/config.toml`, and durable delegation guidance in `~/.codex/AGENTS.md`. The current project instead calls Anthropic's synchronous Messages API and does not create native Codex threads, inherit Codex tools, or participate in Codex approval and sandbox handling.
+Codex supports personal custom agents under `~/.codex/agents/`, global subagent limits under `[agents]` in `~/.codex/config.toml`, and durable delegation guidance in `~/.codex/AGENTS.md`. Codex auto-discovers global instructions from `~/.codex/AGENTS.override.md` if it is non-empty, otherwise from `~/.codex/AGENTS.md`; `AGENTS.routing.md` is the CSE packaged source filename and is never an installed auto-discovery destination. The current project instead calls Anthropic's synchronous Messages API and does not create native Codex threads, inherit Codex tools, or participate in Codex approval and sandbox handling.
 
 The user's existing global guidance contains model and phase rules that must remain authoritative, but it references a missing `~/.Codex/model-routing.md`. Global configuration is outside Git, so the repository must hold the canonical templates and a controlled installer must deploy them.
 
