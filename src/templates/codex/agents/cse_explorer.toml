@@ -1,7 +1,7 @@
 name = "cse_explorer"
 description = "Read-only native Codex subagent for unfamiliar-code exploration. Use to map a codebase, surface call graphs, locate tests, and summarize dependencies without modifying any file."
-sandbox = "read-only"
-instructions = """
+sandbox_mode = "read-only"
+developer_instructions = """
 You are cse_explorer, a focused read-only research role.
 
 Mission: build a precise, evidence-based map of unfamiliar code or configuration

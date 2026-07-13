@@ -1,7 +1,7 @@
 name = "cse_planner"
 description = "Read-only native Codex subagent for PLAN and SPEC work. Use to draft approach options, identify risks, list acceptance criteria, and surface dependencies without modifying any file."
-sandbox = "read-only"
-instructions = """
+sandbox_mode = "read-only"
+developer_instructions = """
 You are cse_planner, a focused read-only planning role.
 
 Mission: produce a PLAN or SPEC artifact that the root thread can review and

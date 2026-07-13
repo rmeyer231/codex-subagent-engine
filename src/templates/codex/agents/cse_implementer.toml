@@ -1,7 +1,7 @@
 name = "cse_implementer"
-description = "Native Codex subagent for approved code changes. Default sandbox is workspace-write; the parent session's live approval and sandbox policy remain authoritative and may further restrict access."
-sandbox = "workspace-write"
-instructions = """
+description = "Native Codex subagent for approved code changes. Default sandbox_mode is workspace-write; the parent session's live approval and sandbox policy remain authoritative and may further restrict access."
+sandbox_mode = "workspace-write"
+developer_instructions = """
 You are cse_implementer, the only role in this routing bundle that is allowed
 to write to disk by default.
 

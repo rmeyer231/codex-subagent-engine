@@ -44,9 +44,9 @@ def test_package_data_root_exists() -> None:
 
 def test_load_template_returns_text() -> None:
     """load_template reads a packaged resource and returns its text contents."""
-    text = codex_global.load_template("agents/AGENTS.md")
+    text = codex_global.load_template("AGENTS.routing.md")
     assert isinstance(text, str)
-    assert text.strip(), "AGENTS.md template should not be empty"
+    assert text.strip(), "AGENTS.routing.md template should not be empty"
 
 
 def test_load_missing_template_raises_actionable_error() -> None:
@@ -73,9 +73,9 @@ def test_load_template_falls_back_to_importlib_resources(
     missing = tmp_path / "definitely-not-on-disk"
     monkeypatch.setattr(codex_global, "package_data_root", lambda: missing)
 
-    text = codex_global.load_template("agents/AGENTS.md")
+    text = codex_global.load_template("AGENTS.routing.md")
     assert isinstance(text, str)
-    assert text.strip(), "AGENTS.md template should not be empty"
+    assert text.strip(), "AGENTS.routing.md template should not be empty"
 
 
 # --- Task 2: Native Codex Routing Bundle -------------------------------------
@@ -106,14 +106,28 @@ def test_agent_profile_exists_and_parses(agent_name: str) -> None:
 
 @pytest.mark.parametrize("agent_name", AGENT_PROFILES)
 def test_agent_profile_has_required_fields(agent_name: str) -> None:
-    """Each profile declares name, description, and instructions."""
+    """Each profile declares name, description, and developer_instructions."""
     doc = _load_agent_toml(agent_name)
     assert "name" in doc, f"{agent_name}: missing 'name'"
     assert "description" in doc, f"{agent_name}: missing 'description'"
-    assert "instructions" in doc, f"{agent_name}: missing 'instructions'"
+    assert "developer_instructions" in doc, f"{agent_name}: missing 'developer_instructions'"
     assert str(doc["name"]).strip(), f"{agent_name}: 'name' is empty"
     assert str(doc["description"]).strip(), f"{agent_name}: 'description' is empty"
-    assert str(doc["instructions"]).strip(), f"{agent_name}: 'instructions' is empty"
+    assert str(doc["developer_instructions"]).strip(), (
+        f"{agent_name}: 'developer_instructions' is empty"
+    )
+
+
+@pytest.mark.parametrize("agent_name", AGENT_PROFILES)
+def test_agent_profile_uses_developer_instructions_not_instructions(
+    agent_name: str,
+) -> None:
+    """Profiles use the native 'developer_instructions' field, not 'instructions'."""
+    doc = _load_agent_toml(agent_name)
+    assert "instructions" not in doc, (
+        f"{agent_name}: must not contain legacy 'instructions'; "
+        f"native schema requires 'developer_instructions'"
+    )
 
 
 @pytest.mark.parametrize("agent_name", AGENT_PROFILES)
@@ -139,18 +153,33 @@ def test_read_only_agents_default_to_read_only_sandbox() -> None:
     read_only = ("cse_explorer", "cse_planner", "cse_reviewer")
     for agent_name in read_only:
         doc = _load_agent_toml(agent_name)
-        sandbox = str(doc.get("sandbox", "")).strip().lower()
-        assert sandbox == "read-only", (
-            f"{agent_name} should be read-only by default, sandbox={sandbox!r}"
+        sandbox_mode = str(doc.get("sandbox_mode", "")).strip().lower()
+        assert sandbox_mode == "read-only", (
+            f"{agent_name} should be read-only by default, "
+            f"sandbox_mode={sandbox_mode!r}"
         )
 
 
 def test_implementer_uses_workspace_write_sandbox() -> None:
     """The implementer is limited to workspace-scoped writes by default."""
     doc = _load_agent_toml("cse_implementer")
-    sandbox = str(doc.get("sandbox", "")).strip().lower()
-    assert sandbox == "workspace-write", (
-        f"cse_implementer should default to workspace-write, sandbox={sandbox!r}"
+    sandbox_mode = str(doc.get("sandbox_mode", "")).strip().lower()
+    assert sandbox_mode == "workspace-write", (
+        f"cse_implementer should default to workspace-write, "
+        f"sandbox_mode={sandbox_mode!r}"
+    )
+
+
+@pytest.mark.parametrize("agent_name", AGENT_PROFILES)
+def test_agent_profile_uses_sandbox_mode_key(agent_name: str) -> None:
+    """Profiles use the native 'sandbox_mode' key, not legacy 'sandbox'."""
+    doc = _load_agent_toml(agent_name)
+    assert "sandbox" not in doc, (
+        f"{agent_name}: must not contain legacy 'sandbox'; "
+        f"native schema requires 'sandbox_mode'"
+    )
+    assert "sandbox_mode" in doc, (
+        f"{agent_name}: missing required 'sandbox_mode' key"
     )
 
 
@@ -170,60 +199,96 @@ def test_agent_profiles_distinct_names() -> None:
     assert len(set(names)) == len(names), f"duplicate agent names: {names}"
 
 
-# --- Managed global AGENTS routing block -------------------------------------
+# --- Managed global AGENTS routing source -----------------------------------
+
+# Canonical path for the managed routing source installed into the user's
+# ~/.codex directory. The installer (Task 3) copies this file to
+# ~/.codex/AGENTS.routing.md and inserts a managed block into AGENTS.md
+# that references it. There must be no agents/AGENTS.md template shipped
+# in the bundle (that file was the placeholder from Task 1).
+ROUTING_SOURCE_NAME = "AGENTS.routing.md"
+ROUTING_SOURCE_CANONICAL_PATH = "~/.codex/AGENTS.routing.md"
 
 
-def test_agents_md_has_managed_markers() -> None:
-    """AGENTS.md uses the BEGIN/END marker pair for managed-block updates."""
-    text = codex_global.load_template("agents/AGENTS.md")
+def test_routing_source_exists_at_canonical_path() -> None:
+    """The managed routing source lives at the exact canonical template path."""
+    text = codex_global.load_template(ROUTING_SOURCE_NAME)
+    assert isinstance(text, str)
+    assert text.strip(), "AGENTS.routing.md template should not be empty"
+
+
+def test_agents_md_template_is_not_shipped() -> None:
+    """The legacy agents/AGENTS.md placeholder is removed from the bundle."""
+    with pytest.raises(codex_global.CodexTemplateNotFound):
+        codex_global.load_template("agents/AGENTS.md")
+
+
+def test_routing_source_has_managed_markers() -> None:
+    """The routing source uses the BEGIN/END marker pair for managed-block updates."""
+    text = codex_global.load_template(ROUTING_SOURCE_NAME)
     assert "<!-- BEGIN CSE-MANAGED -->" in text
     assert "<!-- END CSE-MANAGED -->" in text
 
 
-def test_agents_md_routing_block_maps_roles_to_phases() -> None:
-    """The managed block maps each phase to a deterministic cse_* role."""
-    text = codex_global.load_template("agents/AGENTS.md").lower()
-    expected_pairs = {
-        "cse_explorer": "explor",
-        "cse_planner": "plan",
-        "cse_implementer": "implement",
-        "cse_reviewer": "review",
-    }
-    for role, hint in expected_pairs.items():
-        assert role in text, f"managed block missing role {role}"
-        assert hint in text, f"managed block missing phase keyword {hint!r}"
+def test_routing_source_contains_role_to_phase_rows() -> None:
+    """The routing source contains an explicit role-to-phase row for each cse_* role."""
+    text = codex_global.load_template(ROUTING_SOURCE_NAME)
+    # Each row pairs a phase keyword with a cse_* role on the same line.
+    required_rows = (
+        "cse_explorer",
+        "cse_planner",
+        "cse_implementer",
+        "cse_reviewer",
+    )
+    for role in required_rows:
+        # Same line must mention both the role and a phase verb stem.
+        matched = False
+        for line in text.splitlines():
+            lowered = line.lower()
+            if role in lowered and (
+                "explor" in lowered
+                or "plan" in lowered
+                or "implement" in lowered
+                or "review" in lowered
+            ):
+                matched = True
+                break
+        assert matched, (
+            f"routing source missing same-line role-to-phase row for {role!r}"
+        )
 
 
-def test_agents_md_requires_root_owned_phase_gates() -> None:
-    """The managed block asserts the root owns phase gates and synthesis."""
-    text = codex_global.load_template("agents/AGENTS.md").lower()
+def test_routing_source_requires_root_owned_phase_gates() -> None:
+    """The routing source asserts the root owns phase gates and synthesis."""
+    text = codex_global.load_template(ROUTING_SOURCE_NAME).lower()
     assert "phase gate" in text or "phase-gate" in text or "gates" in text
     assert "root" in text
     assert "synthes" in text
 
 
-def test_agents_md_states_non_delegation_criteria() -> None:
-    """The block enumerates when NOT to delegate (trivial/sequential work)."""
-    text = codex_global.load_template("agents/AGENTS.md").lower()
-    assert "trivial" in text, "managed block must list trivial-work non-delegation"
+def test_routing_source_states_non_delegation_criteria() -> None:
+    """The source enumerates when NOT to delegate (trivial/sequential work)."""
+    text = codex_global.load_template(ROUTING_SOURCE_NAME).lower()
+    assert "trivial" in text, "routing source must list trivial-work non-delegation"
     assert "sequential" in text, (
-        "managed block must list sequential-work non-delegation"
+        "routing source must list sequential-work non-delegation"
     )
 
 
-def test_agents_md_enforces_parallel_write_isolation() -> None:
-    """The block forbids concurrent subagents from owning overlapping files."""
-    text = codex_global.load_template("agents/AGENTS.md").lower()
+def test_routing_source_enforces_parallel_write_isolation() -> None:
+    """The source forbids concurrent subagents from owning overlapping files."""
+    text = codex_global.load_template(ROUTING_SOURCE_NAME).lower()
     assert "overlap" in text or "disjoint" in text
     assert "parallel" in text
     assert "serial" in text or "one owner" in text or "serializ" in text
 
 
-def test_agents_md_references_model_routing_path() -> None:
-    """The managed block points at the canonical lowercase model-routing.md."""
-    text = codex_global.load_template("agents/AGENTS.md")
-    assert "~/.codex/model-routing.md" in text, (
-        "managed block must reference canonical lowercase ~/.codex/model-routing.md"
+def test_routing_source_references_canonical_path() -> None:
+    """The routing source declares the canonical lowercase ~/.codex/AGENTS.routing.md path."""
+    text = codex_global.load_template(ROUTING_SOURCE_NAME)
+    assert ROUTING_SOURCE_CANONICAL_PATH in text, (
+        f"routing source must declare canonical path "
+        f"{ROUTING_SOURCE_CANONICAL_PATH!r}"
     )
 
 
@@ -243,13 +308,42 @@ def test_model_routing_uses_lowercase_path_reference() -> None:
     assert "~/.codex/model-routing.md" in text
 
 
-def test_model_routing_phase_table_present() -> None:
-    """The model-routing.md template includes a phase table with phases."""
-    text = codex_global.load_template("model-routing.md").lower()
-    for phase in ("brainstorm", "implementation", "summarization"):
-        assert phase in text, (
-            f"model-routing.md phase table missing keyword {phase!r}"
+def test_model_routing_has_required_alias_rows() -> None:
+    """The model-routing.md template contains each exact Codex-* alias on a phase row."""
+    text = codex_global.load_template("model-routing.md")
+    # Required (phase keyword, alias) pairs that must co-occur on the same line.
+    required_rows = (
+        ("proposal", "Codex-opus-4-8"),
+        ("spec", "Codex-opus-4-8"),
+        ("architecture", "Codex-opus-4-8"),
+        ("implementation", "Codex-sonnet-4-6"),
+        ("tdd", "Codex-sonnet-4-6"),
+        ("coding", "Codex-sonnet-4-6"),
+        ("summary", "Codex-haiku-4-5"),
+        ("lookup", "Codex-haiku-4-5"),
+        ("low-stakes", "Codex-haiku-4-5"),
+    )
+    for phase, alias in required_rows:
+        matched = any(
+            phase.lower() in line.lower() and alias in line
+            for line in text.splitlines()
         )
+        assert matched, (
+            f"model-routing.md missing same-line alias row for "
+            f"{phase!r} -> {alias!r}"
+        )
+
+
+def test_model_routing_default_alias_is_sonnet() -> None:
+    """The default model alias is exactly Codex-sonnet-4-6."""
+    text = codex_global.load_template("model-routing.md")
+    matched = any(
+        "default" in line.lower() and "Codex-sonnet-4-6" in line
+        for line in text.splitlines()
+    )
+    assert matched, (
+        "model-routing.md missing same-line 'default: Codex-sonnet-4-6' row"
+    )
 
 
 # --- Managed [agents] defaults in config.toml --------------------------------
@@ -271,3 +365,4 @@ def test_config_template_agents_defaults() -> None:
     assert int(agents["max_depth"]) == 1
     assert int(agents["job_max_runtime_seconds"]) == 1800
     assert bool(agents["interrupt_message"]) is True
+

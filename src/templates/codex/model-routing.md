@@ -2,18 +2,19 @@
 
 This file maps workflow phases to recommended model identifiers for the
 active Codex session. It is the canonical reference for the global CSE
-routing policy in `~/.codex/AGENTS.md`.
+routing policy in `~/.codex/AGENTS.routing.md`.
 
 Repository-local AGENTS.md rules win over this file; this file wins over the
 CSE managed routing block when the two disagree on a phase assignment.
 
-## Phase table
+## Phase-to-alias rows
 
-| Phase                              | Default model       | Notes                                                  |
-| ---------------------------------- | ------------------- | ------------------------------------------------------ |
-| Brainstorming, proposal, specs     | `claude-opus-4-8`   | Use when the task requires broad reasoning or design.  |
-| Implementation, TDD, general code  | `claude-sonnet-4-6` | Default for routine engineering work.                  |
-| Summarization, quick lookups      | `claude-haiku-4-5`  | Use for low-stakes reads and short summaries.          |
+| Phase                                          | Alias               |
+| ---------------------------------------------- | ------------------- |
+| proposal, spec, architecture                   | Codex-opus-4-8      |
+| implementation, TDD, coding                    | Codex-sonnet-4-6    |
+| summary, lookup, low-stakes                    | Codex-haiku-4-5     |
+| default                                        | Codex-sonnet-4-6    |
 
 ## Inheritance by default
 
@@ -31,5 +32,5 @@ Codex, provided the parent session itself moves to the new model first.
 
 ## Path
 
-This file lives at `~/.codex/model-routing.md`. The CSE managed AGENTS block
-references it by this exact lowercase path.
+This file lives at `~/.codex/model-routing.md`. The CSE managed routing
+block references it by this exact lowercase path.
