@@ -1,0 +1,46 @@
+tests/test_codex_global.py
+  s_824b09d9c08577::t_798befcc8ae059 202-223,226-228,233-258,261-263,269-272,274,278-280,286-291
+  s_824b09d9c08577::t_a526acaaa1de7f 47,49,76,78
+  s_824b09d9c08577::t_4ea3bcc1cdc0e2 156-159,166-182
+  s_824b09d9c08577::t_43a588bf0ef7a1 367
+  s_824b09d9c08577::t_89278011440bd7 109,113,116-130
+  s_824b09d9c08577::t_45000b13e19485 311-333,337-346
+  s_824b09d9c08577::t_29103af588df42 368
+  s_824b09d9c08577::t_83a2f71c3f0c2d 347-348
+src/templates/codex/agents/cse_explorer.toml
+  s_824b09d9c08577::t_40d1fb29fbbb51 3-4
+  s_824b09d9c08577::t_43a588bf0ef7a1 31
+src/templates/codex/agents/cse_planner.toml
+  s_824b09d9c08577::t_43a588bf0ef7a1 37
+  s_824b09d9c08577::t_626edd7a136895 3-4
+src/templates/codex/agents/cse_implementer.toml
+  s_824b09d9c08577::t_43a588bf0ef7a1 37
+  s_824b09d9c08577::t_7d2ca0110f45ee 2-4
+src/templates/codex/AGENTS.routing.md
+  s_824b09d9c08577::t_976f5344cd341e 1-78
+  s_824b09d9c08577::t_43a588bf0ef7a1 79
+src/templates/codex/model-routing.md
+  s_824b09d9c08577::t_7a238ffb6f50d6 5,10,12-17,35
+  s_824b09d9c08577::t_43a588bf0ef7a1 36
+src/templates/codex/config.toml
+  s_824b09d9c08577::t_43a588bf0ef7a1 9
+src/templates/codex/agents/cse_reviewer.toml
+  s_824b09d9c08577::t_43a588bf0ef7a1 31
+  s_824b09d9c08577::t_9678aeb7e3da9b 3-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "2f95a3927c8b95579ff75602409b70db97857371",
+  "prompts": {},
+  "sessions": {
+    "s_824b09d9c08577": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "35ba62b4-b5b3-4e26-857c-743594bdc260",
+        "model": "anthropic/claude-sonnet-5"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
