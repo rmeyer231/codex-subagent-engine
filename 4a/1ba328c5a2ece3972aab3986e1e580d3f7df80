@@ -1,0 +1,25 @@
+openspec/specs/codex-subagent-routing/spec.md
+  s_2d980dd73b0f71::t_b274416b1b2afa 1-80
+openspec/changes/archive/2026-07-13-global-codex-subagent-routing/tasks.md
+  s_2d980dd73b0f71::t_25570a925327ec 1-37
+openspec/specs/codex-global-installation/spec.md
+  s_2d980dd73b0f71::t_b274416b1b2afa 1-76
+openspec/changes/archive/2026-07-13-global-codex-subagent-routing/design.md
+  s_2d980dd73b0f71::t_25570a925327ec 1-86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "4a1ba328c5a2ece3972aab3986e1e580d3f7df80",
+  "prompts": {},
+  "sessions": {
+    "s_2d980dd73b0f71": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f5cf9-9cad-7471-b63a-e4fda6f1b868",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
