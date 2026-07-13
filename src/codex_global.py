@@ -12,7 +12,8 @@ error, rather than a generic ``FileNotFoundError`` from somewhere deep
 inside template rendering.
 
 Resource names accepted here are *relative* POSIX-style paths under the
-package data root (e.g. ``agents/AGENTS.md``). Traversal segments
+package data root (e.g. ``AGENTS.routing.md`` or
+``agents/cse_explorer.toml``). Traversal segments
 (``..``) and absolute paths are rejected up front.
 """
 
@@ -204,7 +205,8 @@ def load_template(resource: str) -> str:
     ----------
     resource:
         Relative POSIX-style path under the package data root, e.g.
-        ``agents/AGENTS.md`` or ``model-routing.md``.
+        ``AGENTS.routing.md``, ``agents/cse_explorer.toml``, or
+        ``model-routing.md``.
 
     Returns
     -------
