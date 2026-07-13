@@ -1,0 +1,19 @@
+openspec/changes/global-codex-subagent-routing/tasks.md
+  s_2d980dd73b0f71::t_32598c764c5e84 33-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "f6ea9d4782d4cf925640ecd5d9d2316b28d1be9c",
+  "prompts": {},
+  "sessions": {
+    "s_2d980dd73b0f71": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f5cf9-9cad-7471-b63a-e4fda6f1b868",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
