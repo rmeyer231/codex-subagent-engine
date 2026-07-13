@@ -1,0 +1,43 @@
+src/codex_global/data/agents/AGENTS.md
+  s_1aafb0135282f3::t_949cdcb48bd8b3 1-3
+src/cli.py
+  s_1aafb0135282f3::t_a2d078f7662b04 39,58
+src/batch.py
+  s_1aafb0135282f3::t_a2d078f7662b04 17
+tests/test_batch.py
+  s_1aafb0135282f3::t_a2d078f7662b04 4-5
+src/manifest.py
+  s_1aafb0135282f3::t_a2d078f7662b04 24,54,83
+src/subagent.py
+  s_1aafb0135282f3::t_a2d078f7662b04 13,17
+tests/test_codex_global.py
+  s_1aafb0135282f3::t_3684aed024ac03 1-47
+src/engine.py
+  s_1aafb0135282f3::t_a2d078f7662b04 13,19,21,23-24
+src/approval.py
+  s_1aafb0135282f3::t_a2d078f7662b04 12,16
+src/sandbox.py
+  s_1aafb0135282f3::t_a2d078f7662b04 11,64
+pyproject.toml
+  s_1aafb0135282f3::t_7c49fa81ccb18d 15,21,27-32,35-51
+src/codex_global/__init__.py
+  s_1aafb0135282f3::t_582944b89a3aa6 1-132
+uv.lock
+  s_1aafb0135282f3::t_a25851ef5901f7 1-505
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "27f75813d4692fdede90ea6b082cb6ad75a3c6a0",
+  "prompts": {},
+  "sessions": {
+    "s_1aafb0135282f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0c6242be-4229-4686-a3a5-4f3af9d2644b",
+        "model": "anthropic/claude-sonnet-5"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
