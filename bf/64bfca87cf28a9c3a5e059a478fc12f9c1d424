@@ -1,0 +1,22 @@
+README.md
+  s_2d980dd73b0f71::t_3c8b97d11bdccb 15-23,37-72,76-134,224-225,230-231
+  s_2d980dd73b0f71::t_8b3fdbcefbabf3 73-75
+src/codex_global.py
+  s_2d980dd73b0f71::t_3c8b97d11bdccb 15-16,208-209
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "bf64bfca87cf28a9c3a5e059a478fc12f9c1d424",
+  "prompts": {},
+  "sessions": {
+    "s_2d980dd73b0f71": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f5cf9-9cad-7471-b63a-e4fda6f1b868",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
