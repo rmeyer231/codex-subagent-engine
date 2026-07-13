@@ -1,0 +1,30 @@
+tests/test_codex_install.py
+  s_2d980dd73b0f71::t_91a4ad991b4db9 1-205
+tests/test_cli.py
+  s_2d980dd73b0f71::t_91a4ad991b4db9 1-78
+src/cli.py
+  s_2d980dd73b0f71::t_530149bb902950 11,29-49,55-101,133
+src/codex_global.py
+  s_2d980dd73b0f71::t_1653a614f26ad1 21-23,26-27,32-33,36-49,56-61,82-130,135-159
+  s_2d980dd73b0f71::t_3cdf52cfac2077 3-4,131-134,545
+  s_2d980dd73b0f71::t_04f6f875aa988c 243-284,286-311,334-460,462-521,523-544,546-555,563-577,579-581,583,585-593,596-597
+  s_2d980dd73b0f71::t_e4723ae838adbd 50-55,285,312-333,461,556-562,584
+  s_2d980dd73b0f71::t_6098c41ef286d6 24-25,522
+  s_2d980dd73b0f71::t_c2cc0fbaff8de3 160-161
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "ff950c397999be4a5eaf2efbf6fab74bd7009bfd",
+  "prompts": {},
+  "sessions": {
+    "s_2d980dd73b0f71": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f5cf9-9cad-7471-b63a-e4fda6f1b868",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
