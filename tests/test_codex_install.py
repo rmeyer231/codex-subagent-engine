@@ -176,6 +176,34 @@ def test_apply_backs_up_changed_files_and_second_apply_is_noop(tmp_path: Path) -
     assert second_result.backup_directory is None
 
 
+def test_apply_reports_backup_before_first_destination_write(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    target = tmp_path / "codex"
+    target.mkdir()
+    (target / "config.toml").write_text(
+        "[agents]\nmax_threads = 8\n", encoding="utf-8"
+    )
+    plan = codex_global.plan_install(target)
+    events: list[tuple[str, Path]] = []
+    original_atomic_write = codex_global._atomic_write
+
+    def record_write(path: Path, content: str) -> None:
+        events.append(("write", path))
+        original_atomic_write(path, content)
+
+    monkeypatch.setattr(codex_global, "_atomic_write", record_write)
+
+    result = codex_global.apply_plan(
+        plan,
+        backup_reporter=lambda path: events.append(("backup", path)),
+    )
+
+    assert result.backup_directory is not None
+    assert events[0] == ("backup", result.backup_directory)
+    assert events[1][0] == "write"
+
+
 def test_apply_refuses_conflict_before_creating_backup(tmp_path: Path) -> None:
     target = tmp_path / "codex"
     target.mkdir()

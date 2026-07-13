@@ -21,7 +21,7 @@ from __future__ import annotations
 import os
 import shutil
 import tempfile
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from contextlib import suppress
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -546,7 +546,11 @@ def _post_write_validate(plan: InstallPlan) -> None:
         raise InstallOperationalError(f"Post-write validation failed: {exc}") from exc
 
 
-def apply_plan(plan: InstallPlan) -> InstallResult:
+def apply_plan(
+    plan: InstallPlan,
+    *,
+    backup_reporter: Callable[[Path], None] | None = None,
+) -> InstallResult:
     """Apply a conflict-free plan using backups and atomic replacements."""
     if plan.conflicts:
         paths = ", ".join(entry.relative_path.as_posix() for entry in plan.conflicts)
@@ -565,6 +569,8 @@ def apply_plan(plan: InstallPlan) -> InstallResult:
         return InstallResult(False, None, ())
 
     backup = _create_backup(plan)
+    if backup is not None and backup_reporter is not None:
+        backup_reporter(backup)
     for entry in plan.changes:
         _atomic_write(plan.codex_home / entry.relative_path, plan.rendered[entry.relative_path])
     _post_write_validate(plan)

@@ -87,14 +87,15 @@ def _install_codex(args):
             print("Preview complete; no files were written.")
             return 0
 
-        result = apply_plan(plan)
+        def report_backup(backup_directory):
+            backup_relative = backup_directory.relative_to(plan.codex_home)
+            print(f"Backup: {backup_relative.as_posix()}")
+
+        result = apply_plan(plan, backup_reporter=report_backup)
         if not result.changed:
             print("No-op: the managed Codex routing bundle is already current.")
             return 0
         print(f"Applied {len(result.changed_paths)} managed destination(s).")
-        if result.backup_directory is not None:
-            backup_relative = result.backup_directory.relative_to(plan.codex_home)
-            print(f"Backup: {backup_relative.as_posix()}")
         return 0
     except CodexInstallError as exc:
         print(f"Error: {exc}", file=sys.stderr)
