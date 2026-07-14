@@ -2,7 +2,7 @@
 
 CSE has two intentionally separate execution paths: the legacy Anthropic-backed manifest engine and a native Codex routing bundle installed under `CODEX_HOME`. The native bundle manages agent roles, `[agents]` limits, global routing guidance, and model inheritance; it deliberately preserves unrelated provider configuration. The user's ordinary Codex configuration currently selects OpenLimits, and the existing phase-routing aliases depend on that provider.
 
-Codex Pooler is a separately deployed gateway that can expose a Codex backend-compatible provider while selecting among authorized upstream accounts. It may add useful credential isolation, capacity routing, and sanitized operational metadata, but it also introduces third-party release churn, centralized credentials, a database-backed service, and account-authorization and license constraints. The prior native-routing work is present on `feat/global-codex-routing`, while its upstream PR is closed and unmerged, so this change remains dependent on a decision about that branch.
+Codex Pooler is a separately deployed gateway that can expose a Codex backend-compatible provider while selecting among authorized upstream accounts. It may add useful credential isolation, capacity routing, and sanitized operational metadata, but it also introduces third-party release churn, centralized credentials, a database-backed service, and account-authorization and license constraints. The prior native-routing work was merged into the fork's `master` through PR #1, so this change is based on that merged capability.
 
 ## Goals / Non-Goals
 
@@ -65,11 +65,11 @@ A canary passes only when every mandatory control-plane, transport, routing, pre
 
 Session continuity will be tested by starting and resuming a conversation created entirely inside the disposable canary target. Existing user sessions will not be retagged or copied. This confines state changes and prevents an experiment from rewriting the ordinary Codex session database.
 
-### Gate implementation and publication on prior-branch disposition
+### Base the canary on the merged native-routing capability
 
-This SPEC may be reviewed independently, but implementation and any follow-up PR must declare that it depends on `feat/global-codex-routing`. The prior closed, unmerged PR must be reopened, superseded, or otherwise resolved before this change is proposed for merge.
+This SPEC may be reviewed independently, but implementation and any follow-up PR must declare that it depends on the native routing capability merged into the fork's `master` by PR #1. The canary branch is based on that merged `master` commit rather than the pre-merge development branch.
 
-Stacking the work silently was rejected because it would obscure the dependency and make the canary documentation appear usable on upstream `master`, which does not yet contain the native installer.
+Using the merged base keeps the dependency visible and makes the canary documentation usable against the fork's current `master`, which contains the native installer.
 
 ## Risks / Trade-offs
 
@@ -80,7 +80,7 @@ Stacking the work silently was rejected because it would obscure the dependency 
 - **A manual canary is less repeatable than CI** → Use a precise checklist and synthetic regression test while keeping secrets and external infrastructure out of CI.
 - **Self-hosting creates operational cost without guaranteed ROI** → Stop after the pilot unless shared authorized capacity or centralized routing evidence solves a measured need.
 - **ELv2 and upstream-account terms constrain deployment choices** → Keep Pooler external, do not offer it as a CSE-managed service, and require operator confirmation of authorized use.
-- **The base feature is not merged upstream** → Block merge-ready implementation until the prior PR has a documented disposition.
+- **The base feature may drift after merge** → Keep the canary branch based on the fork's current `master` and re-run the pinned validation when the native routing bundle changes.
 
 ## Migration Plan
 
@@ -99,5 +99,5 @@ Stacking the work silently was rejected because it would obscure the dependency 
 - Does the pinned Pooler release expose a model compatible with the active Codex session and the intended phase without changing the OpenLimits aliases?
 - Which Codex CLI build will be the supported canary baseline?
 - Is one baseline upstream sufficient for the first pass, with failover explicitly deferred, or are multiple authorized upstreams available now?
-- What is the intended disposition of upstream PR #1 for the native routing bundle?
+- Which future native-routing changes would require a new canary baseline?
 - Has the organization accepted the Pooler credential boundary, upstream account terms, and ELv2 deployment constraints?

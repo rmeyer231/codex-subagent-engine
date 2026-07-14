@@ -1,6 +1,6 @@
 ## 1. Prerequisites and Scope Gates
 
-- [ ] 1.1 Resolve whether upstream PR #1 will be reopened or superseded, and record the base-branch dependency for this change before preparing a merge-ready branch.
+- [x] 1.1 Confirm upstream PR #1 is merged and record the merged `master` base dependency before preparing a merge-ready branch.
 - [x] 1.2 Re-verify the current Codex Pooler release, Codex CLI provider schema, backend route, license, and public compatibility guidance; pin the exact versions used by the guide and canary.
 - [ ] 1.3 Confirm the pilot's upstream account and client use is authorized, and obtain separate explicit approval before provisioning Pooler, creating credentials, or running the live canary.
 
