@@ -1,0 +1,31 @@
+openspec/specs/provider-routing-validation/spec.md
+  s_66bbc41354e755::t_a61cb143c0f925 1-86
+AGENTS.md
+  s_66bbc41354e755::t_da9bf233e43954 1-24
+openspec/specs/codex-subagent-routing/spec.md
+  s_66bbc41354e755::t_45a65ab882c8df 81-102
+openspec/specs/dual-harness-global-installation/spec.md
+  s_66bbc41354e755::t_45a65ab882c8df 1-104
+CLAUDE.md
+  s_66bbc41354e755::t_da9bf233e43954 1-30
+docs/openlimits-stack.md
+  s_66bbc41354e755::t_da9bf233e43954 50-78
+openspec/specs/dual-harness-routing/spec.md
+  s_66bbc41354e755::t_a61cb143c0f925 1-94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "5ac0003a8d279071c6e8ad7e83a0c5e1e56be4e2",
+  "prompts": {},
+  "sessions": {
+    "s_66bbc41354e755": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f5e8b-c5ff-74c2-9c1b-40974cf55d30",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
