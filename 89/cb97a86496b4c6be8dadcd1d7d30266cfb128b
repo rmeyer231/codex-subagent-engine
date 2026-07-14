@@ -1,0 +1,19 @@
+openspec/specs/codex-pooler-interoperability/spec.md
+  s_43dd0c2459d79d::t_c67a795a2596eb 1-108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "89cb97a86496b4c6be8dadcd1d7d30266cfb128b",
+  "prompts": {},
+  "sessions": {
+    "s_43dd0c2459d79d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f5e33-cf7b-7ec2-98e7-eb61d41a06d7",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
