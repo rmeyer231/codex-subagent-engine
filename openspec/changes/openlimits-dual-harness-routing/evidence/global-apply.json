@@ -1,0 +1,33 @@
+{
+  "status": "pass",
+  "billing_intent": "OpenLimits Max + Claude Pro + ChatGPT Free",
+  "credential_preflight": "pass",
+  "legacy_plaintext_finding": "cleared",
+  "primary_transaction": {
+    "id": "txn-20260714T034957.773078Z",
+    "managed_destinations": 7,
+    "rollback_scope": "complete pre-stack global state"
+  },
+  "stabilization_transaction": {
+    "id": "txn-20260714T035002.112125Z",
+    "managed_destinations": 1,
+    "reason": "Removed one TOML serialization blank line before the fixed-point regression was added"
+  },
+  "repoprompt_ce_transaction": {
+    "id": "txn-20260714T063017.567626Z",
+    "managed_destinations": 3,
+    "changes": [
+      "claude/CLAUDE.md",
+      "claude/model-routing.md",
+      "launcher/claude-openlimits-rpce"
+    ],
+    "external_wrapper": "/usr/local/bin/claude-rpce",
+    "external_wrapper_modified": false
+  },
+  "final_no_op": {
+    "all_targets_current": true,
+    "transactions_before": 3,
+    "transactions_after": 3
+  },
+  "subscription_state_changed_by_cse": false
+}

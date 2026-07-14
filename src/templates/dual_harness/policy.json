@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "stack": "OpenLimits Max + Claude Pro + ChatGPT Free",
+  "advisory": true,
+  "providers": {
+    "claude_native": {"provider": "anthropic", "billing": "Claude Pro", "managed_overrides": false},
+    "claude_openlimits": {"provider": "openlimits", "base_url": "https://openlimits.app", "wire_api": "messages", "billing": "OpenLimits Max"},
+    "codex_openlimits": {"provider": "openlimits", "base_url": "https://openlimits.app/v1", "wire_api": "responses", "billing": "OpenLimits Max"},
+    "chatgpt_free": {"provider": "openai", "billing": "ChatGPT Free", "managed": false, "manual_handoff_only": true}
+  },
+  "surfaces": {
+    "claude_desktop": "claude_native",
+    "claude_cli": "claude_native",
+    "claude_repoprompt_ce": "claude_native",
+    "claude_openlimits": "claude_openlimits",
+    "claude_openlimits_repoprompt_ce": "claude_openlimits",
+    "codex_cli": "codex_openlimits",
+    "codex_app": "codex_openlimits",
+    "claude_codex_plugin": "codex_openlimits",
+    "chatgpt_app": "chatgpt_free"
+  },
+  "models": {
+    "claude": {
+      "architecture": "anthropic/fable-5",
+      "implementation": "anthropic/claude-sonnet-5",
+      "low_stakes": "anthropic/claude-haiku-4.5"
+    },
+    "codex": {
+      "planning_review": "openai/gpt-5.6-sol",
+      "implementation": "openai/gpt-5.6-terra",
+      "low_stakes": "openai/gpt-5.6-luna"
+    }
+  },
+  "defaults": {
+    "codex_model": "openai/gpt-5.6-terra",
+    "keychain_service": "OpenLimits",
+    "keychain_account": "api-key"
+  },
+  "claude_environment": {
+    "ANTHROPIC_BASE_URL": "https://openlimits.app",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "anthropic/fable-5",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "anthropic/claude-sonnet-5",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "anthropic/claude-haiku-4.5"
+  },
+  "review_limits": {"planning_reviews": 1, "final_reviews": 1, "correction_cycles": 1},
+  "handoff_fields": ["owner", "worktree", "branch", "objective", "allowed_files", "artifacts", "phase", "validation"],
+  "plugin_delegation": {"already_delegated": true, "nested_delegation_default": false}
+}

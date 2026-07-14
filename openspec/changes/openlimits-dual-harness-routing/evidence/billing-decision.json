@@ -1,0 +1,34 @@
+{
+  "recorded_at": "2026-07-14T06:43:09Z",
+  "status": "ready_with_explicit_waivers",
+  "selected_stack": "OpenLimits Max + Claude Pro + ChatGPT Free",
+  "user_confirmation": "I waive the native Claude CLI canary until Claude Pro/login refreshes, waive missing provider-dashboard attribution for the successful OpenLimits Claude, RepoPrompt CE, Codex CLI, Codex App, and Claude Codex plugin canaries, and confirm OpenLimits Max + Claude Pro + ChatGPT Free.",
+  "waivers": [
+    {
+      "surface": "native-claude",
+      "reason": "Deferred until Claude Pro or login state refreshes"
+    },
+    {
+      "surface": "openlimits-claude",
+      "reason": "Functional canary succeeded; provider-dashboard attribution not recorded"
+    },
+    {
+      "surface": "openlimits-claude-rpce",
+      "reason": "Automated and interactive canaries succeeded; provider-dashboard attribution not recorded"
+    },
+    {
+      "surface": "codex-cli",
+      "reason": "Functional canary succeeded; provider-dashboard attribution not recorded"
+    },
+    {
+      "surface": "codex-app",
+      "reason": "Disposable write handoff passed; provider-dashboard attribution not recorded"
+    },
+    {
+      "surface": "claude-codex-plugin",
+      "reason": "Read-only plugin canary passed; provider-dashboard attribution not recorded"
+    }
+  ],
+  "subscription_changes_managed_by_cse": false,
+  "credential_value_recorded": false
+}

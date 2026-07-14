@@ -80,6 +80,23 @@ permitted only when write sets are disjoint AND there is no ordering
 dependency. The configured max_threads = 4 cap is the upper bound on
 concurrent open agents, not a target.
 
+## Claude plugin delegation boundary
+
+Work received through Claude's official Codex plugin is already delegated.
+For a routine bounded plugin task, the receiving Codex root MUST NOT create a
+second CSE delegation layer. Further delegation is allowed only when the
+handoff explicitly requests independent, non-overlapping subwork and the
+active depth, concurrency, and synthesis rules permit it.
+
+## Cross-application sole writer
+
+Exactly one harness is the sole writer for a checkout. A write-capable handoff
+MUST record `owner`, `worktree`, `branch`, `objective`, `allowed_files`,
+`artifacts`, `phase`, and `validation`. Codex remains read-only when any of
+those fields is missing or when another harness retains write ownership.
+Transfer of ownership is explicit; application session continuity does not
+transfer file-write authority.
+
 ## Packaged source vs. installed destination
 
 This file is the **packaged source** for the CSE managed routing block

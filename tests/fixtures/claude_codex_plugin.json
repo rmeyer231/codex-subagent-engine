@@ -1,0 +1,9 @@
+{
+  "plugin": "codex@openai-codex",
+  "verified_version": "1.0.5",
+  "command": ["codex", "app-server"],
+  "codex_home_resolution": "${CODEX_HOME:-~/.codex}",
+  "network_allowed": false,
+  "provider_request_allowed": false,
+  "purpose": "Disposable plugin canary contract; stub codex in PATH for automated tests."
+}

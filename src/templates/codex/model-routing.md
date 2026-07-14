@@ -7,14 +7,14 @@ block installed into `~/.codex/AGENTS.md`.
 Repository-local AGENTS.md rules win over this file; this file wins over the
 CSE managed routing block when the two disagree on a phase assignment.
 
-## Phase-to-alias rows
+## Phase-to-model rows
 
-| Phase                                          | Alias               |
-| ---------------------------------------------- | ------------------- |
-| proposal, spec, architecture                   | Codex-opus-4-8      |
-| implementation, TDD, coding                    | Codex-sonnet-4-6    |
-| summary, lookup, low-stakes                    | Codex-haiku-4-5     |
-| default                                        | Codex-sonnet-4-6    |
+| Phase                                          | OpenLimits model       |
+| ---------------------------------------------- | ---------------------- |
+| proposal, spec, architecture, hard review      | openai/gpt-5.6-sol     |
+| implementation, TDD, coding                    | openai/gpt-5.6-terra   |
+| summary, lookup, low-stakes                    | openai/gpt-5.6-luna    |
+| default                                        | openai/gpt-5.6-terra   |
 
 ## Advisory routing
 

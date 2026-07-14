@@ -1,0 +1,29 @@
+{
+  "captured_at": "2026-07-14T04:19:53Z",
+  "surface": "native-claude",
+  "status": "fail",
+  "provider_intent": "Anthropic native",
+  "billing_destination_intent": "Claude Pro",
+  "credential_values_recorded": false,
+  "correction": "Removed every inherited OpenLimits Claude endpoint, credential, and default-model variable from the child environment.",
+  "removed_environment_keys": [
+    "ANTHROPIC_BASE_URL",
+    "ANTHROPIC_API_KEY",
+    "ANTHROPIC_AUTH_TOKEN",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL"
+  ],
+  "local_auth_metadata": {
+    "loggedIn": true,
+    "authMethod": "oauth_token",
+    "apiProvider": "firstParty"
+  },
+  "request_result": "nonzero exit",
+  "waiver": {
+    "recorded_at": "2026-07-14T06:43:09Z",
+    "source": "explicit user waiver",
+    "reason": "Native Claude CLI canary deferred until Claude Pro or login state refreshes"
+  },
+  "conclusion": "The earlier successful ordinary-Claude row was invalid because the long-lived parent process carried OpenLimits overrides. The corrected native CLI request did not complete; use Claude Desktop as the independent native surface or refresh the CLI login."
+}
