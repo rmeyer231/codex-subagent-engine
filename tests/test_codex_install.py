@@ -77,6 +77,70 @@ def test_plan_preserves_unrelated_config_and_comments(tmp_path: Path) -> None:
     assert "interrupt_message = true" in rendered
 
 
+def test_pooler_provider_and_mcp_survive_preview_apply_and_noop(
+    tmp_path: Path,
+) -> None:
+    target = tmp_path / "codex"
+    target.mkdir()
+    config_path = target / "config.toml"
+    config_path.write_text(
+        'model_provider = "openlimits"\n\n'
+        "[model_providers.openlimits]\n"
+        'name = "OpenAI"\n'
+        'base_url = "https://openlimits.invalid/v1"\n'
+        'env_key = "OPENLIMITS_API_KEY"\n'
+        'wire_api = "responses"\n\n'
+        "[model_providers.codex-pooler-ws]\n"
+        'name = "OpenAI"\n'
+        'base_url = "https://pooler.invalid/backend-api/codex"\n'
+        'env_key = "CODEX_POOLER_API_KEY"\n'
+        'wire_api = "responses"\n'
+        "supports_websockets = true\n"
+        "requires_openai_auth = true\n\n"
+        "[mcp_servers.codex_pooler]\n"
+        'url = "https://pooler.invalid/mcp"\n'
+        'bearer_token_env_var = "CODEX_POOLER_MCP_KEY"\n\n'
+        "[agents]\n"
+        "max_threads = 99\n",
+        encoding="utf-8",
+    )
+
+    def assert_unrelated_config_is_preserved(text: str) -> None:
+        doc = codex_global._parse_toml(text, "test Pooler config")
+        assert doc["model_provider"] == "openlimits"
+        assert doc["model_providers"]["openlimits"] == {
+            "name": "OpenAI",
+            "base_url": "https://openlimits.invalid/v1",
+            "env_key": "OPENLIMITS_API_KEY",
+            "wire_api": "responses",
+        }
+        assert doc["model_providers"]["codex-pooler-ws"] == {
+            "name": "OpenAI",
+            "base_url": "https://pooler.invalid/backend-api/codex",
+            "env_key": "CODEX_POOLER_API_KEY",
+            "wire_api": "responses",
+            "supports_websockets": True,
+            "requires_openai_auth": True,
+        }
+        assert doc["mcp_servers"]["codex_pooler"] == {
+            "url": "https://pooler.invalid/mcp",
+            "bearer_token_env_var": "CODEX_POOLER_MCP_KEY",
+        }
+
+    first_plan = codex_global.plan_install(target)
+    assert_unrelated_config_is_preserved(first_plan.content_for(Path("config.toml")))
+
+    first_result = codex_global.apply_plan(first_plan)
+    assert first_result.changed is True
+    assert_unrelated_config_is_preserved(config_path.read_text(encoding="utf-8"))
+
+    second_plan = codex_global.plan_install(target)
+    assert {entry.action for entry in second_plan.entries} == {"no-op"}
+    second_result = codex_global.apply_plan(second_plan)
+    assert second_result.changed is False
+    assert second_result.backup_directory is None
+
+
 def test_plan_appends_then_replaces_only_managed_agents_block(tmp_path: Path) -> None:
     target = tmp_path / "codex"
     target.mkdir()
