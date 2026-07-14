@@ -16,6 +16,12 @@ CSE managed routing block when the two disagree on a phase assignment.
 | summary, lookup, low-stakes                    | Codex-haiku-4-5     |
 | default                                        | Codex-sonnet-4-6    |
 
+## Advisory routing
+
+These mappings are recommendations, not phase gates. A mismatch MUST NOT stop
+or block work, require `/model`, or ask the user to switch models. Continue
+with the current session model unless the user explicitly requests a change.
+
 ## Inheritance by default
 
 Custom agent profiles in `~/.codex/agents/cse_*.toml` deliberately omit a
@@ -25,10 +31,10 @@ the active Codex distribution; until then, leave the inheritance in place.
 
 ## Switching models
 
-The root thread may switch the active model for the next phase; subagents
-inherit whichever model the parent session is running when they are spawned.
-This means a single session can hand off between phases without restarting
-Codex, provided the parent session itself moves to the new model first.
+The user may switch the active model for the next phase; subagents inherit
+whichever model the parent session is running when they are spawned. The root
+thread may recommend a model, but it continues with the current model when the
+user does not request a switch.
 
 ## Path
 

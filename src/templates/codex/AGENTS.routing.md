@@ -42,7 +42,10 @@ dispatching work from the next phase it MUST wait for:
 3. Reviewer findings to be triaged and either accepted (open issues for the
    implementer) or rejected (with rationale).
 
-The root thread MUST consult ~/.codex/model-routing.md before selecting a phase model.
+The root thread consults ~/.codex/model-routing.md when selecting a phase
+model. Its mappings are advisory: a mismatch MUST NOT block work, require a
+model switch, or ask the user to switch models. Continue with the current
+session model unless the user explicitly requests a change.
 
 Subagents MUST NOT advance to the next phase on their own; they report and
 return. The root thread is the only place where the final answer is

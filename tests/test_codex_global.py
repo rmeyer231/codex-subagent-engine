@@ -269,13 +269,13 @@ def test_routing_source_requires_root_owned_phase_gates() -> None:
     assert "synthes" in text
 
 
-def test_routing_source_requires_root_to_consult_canonical_model_routing() -> None:
-    """The installed block directs root phase/model selection to the canonical file."""
-    text = codex_global.load_template(ROUTING_SOURCE_NAME)
-    assert (
-        "root thread MUST consult ~/.codex/model-routing.md before selecting "
-        "a phase model"
-    ) in text
+def test_routing_source_makes_canonical_model_routing_advisory() -> None:
+    """The installed block consults canonical routing without gating work."""
+    text = codex_global.load_template(ROUTING_SOURCE_NAME).lower()
+    assert "~/.codex/model-routing.md" in text
+    assert "mappings are advisory" in text
+    assert "must not block work" in text
+    assert "unless the user explicitly requests a change" in text
 
 
 def test_routing_source_states_non_delegation_criteria() -> None:
@@ -396,6 +396,15 @@ def test_model_routing_default_alias_is_sonnet() -> None:
     )
 
 
+def test_model_routing_is_advisory_and_non_blocking() -> None:
+    """A phase/model mismatch never pauses work or requires a switch."""
+    text = codex_global.load_template("model-routing.md").lower()
+    assert "recommendations, not phase gates" in text
+    assert "must not stop" in text
+    assert "ask the user to switch models" in text
+    assert "continues with the current model" in text
+
+
 # --- Managed [agents] defaults in config.toml --------------------------------
 
 
@@ -415,5 +424,4 @@ def test_config_template_agents_defaults() -> None:
     assert int(agents["max_depth"]) == 1
     assert int(agents["job_max_runtime_seconds"]) == 1800
     assert bool(agents["interrupt_message"]) is True
-
 
