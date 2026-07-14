@@ -1,0 +1,23 @@
+src/templates/codex/model-routing.md
+  s_a6f72e0802c16c::t_70317283980b66 19-24,34-37
+src/templates/codex/AGENTS.routing.md
+  s_a6f72e0802c16c::t_70317283980b66 45-48
+tests/test_codex_global.py
+  s_a6f72e0802c16c::t_70317283980b66 272-278,399-407
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "50d26f4a0196ad9569a92b8736473769707b043a",
+  "prompts": {},
+  "sessions": {
+    "s_a6f72e0802c16c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f5e34-7427-7001-9410-99dadce1a502",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
