@@ -12,15 +12,74 @@ license = {text = "MIT"}
 dependencies = [
     "anthropic>=0.40.0",
     "rich>=13.0",
+    "tomlkit>=0.13",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.6",
 ]
 
 [project.scripts]
 cse = "src.cli:main"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+include = [
+    "src/templates/codex/**",
+]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = [
+    "E501",  # line length handled by formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "B",   # tests may use bare asserts / raise patterns
+    "F401",  # pre-existing baseline: pytest/pathlib imported for fixture availability
+    "I001",  # pre-existing baseline: import blocks not normalized
+]
+# Pre-existing baseline code (do not refactor in Task 1):
+"src/engine.py" = [
+    "F841",  # `all_results` slot reserved for future use
+    "I001",  # baseline: import block order
+]
+"src/cli.py" = [
+    "I001",  # baseline: in-function imports not normalized
+]
+"src/batch.py" = [
+    "B905",  # baseline: zip() without explicit strict=
+    "I001",  # baseline: import block order
+]
+"src/manifest.py" = [
+    "I001",  # baseline: import block order
+    "UP037",  # baseline: "Manifest" forward ref annotations
+]
+"src/sandbox.py" = [
+    "I001",  # baseline: import block order
+    "SIM105",  # baseline: try/except/pass in cleanup paths
+    "UP041",  # baseline: asyncio.TimeoutError alias
+]
+"src/approval.py" = [
+    "I001",  # baseline: import block order
+]
+"src/subagent.py" = [
+    "I001",  # baseline: import block order
+]
+# Task 1 additions: keep these clean so future tasks build on a clean baseline.
+"src/codex_global.py" = []  # noqa: E501
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
