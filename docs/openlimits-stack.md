@@ -47,6 +47,35 @@ custom API key** and enable it. This is the expected choice for both managed
 OpenLimits launchers; do not run `/login`, which belongs to the native Claude
 Pro lane. Non-interactive `-p` requests use the supplied key automatically.
 
+## How future sessions route models
+
+Model routing supplies defaults and recommendations; it does not detect phase
+changes or switch a running session automatically. Future sessions should:
+
+1. Identify the active surface and its provider lane.
+2. Load the repository's `AGENTS.md` or `CLAUDE.md`, as applicable.
+3. Consult `~/.codex/model-routing.md` or `~/.claude/model-routing.md` for the
+   canonical model identifiers.
+4. Start with the coding model for ordinary work.
+5. Recommend high reasoning for bounded architecture, specification, security,
+   risky reconciliation, ambiguous debugging, or hard-review work.
+6. Recommend the fast model for standalone summaries, lookups, status, and
+   low-risk documentation when switching overhead is worthwhile.
+7. Continue on the current model if the user does not request a switch.
+8. Reassess routing only when the task phase materially changes.
+
+For this repository, high-reasoning examples include OpenSpec proposals,
+installer transaction and rollback design, credential or provider security,
+and cross-harness ownership. Coding examples include CLI changes, template
+rendering, tests, focused refactors, and normal bug fixes. Fast-model examples
+include command lookups, artifact inventories, status summaries, and low-risk
+documentation.
+
+A file named `.:model-routing-bootstrap.md` is prompt text, not an instruction
+file recognized by Codex or Claude, and has no runtime routing effect. A normal
+Claude Desktop chat and the ChatGPT Free app also do not automatically consume
+repository routing guidance; use an explicit handoff for those surfaces.
+
 ## Credential provisioning
 
 The default Keychain tuple is service `OpenLimits`, account `api-key`. The
