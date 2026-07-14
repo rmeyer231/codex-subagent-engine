@@ -1,0 +1,41 @@
+openspec/changes/codex-pooler-canary/proposal.md
+  s_43dd0c2459d79d::t_caee396f5a91aa 1-28
+openspec/changes/codex-pooler-canary/design.md
+  s_43dd0c2459d79d::t_071aa4c73c1834 1-103
+README.md
+  s_43dd0c2459d79d::t_ca0a20567be8ec 135-136
+openspec/changes/codex-pooler-canary/.openspec.yaml
+  s_43dd0c2459d79d::t_636ccb5feec010 1-2
+openspec/changes/codex-pooler-canary/specs/codex-pooler-interoperability/spec.md
+  s_43dd0c2459d79d::t_56e1929192e4a9 1-104
+tests/test_codex_install.py
+  s_43dd0c2459d79d::t_c91538f7f4f484 80-143
+openspec/changes/codex-pooler-canary/tasks.md
+  s_43dd0c2459d79d::t_d50f9cfde83d16 4,15-18
+  s_43dd0c2459d79d::t_b77bfe47319e28 1-2,5-8,12-14,19-21,26-39,41
+  s_43dd0c2459d79d::t_665c032e8ee43e 25,40
+  s_43dd0c2459d79d::t_4bc4ff21505bc3 22-24
+  s_43dd0c2459d79d::t_d380d8629574aa 3
+  s_43dd0c2459d79d::t_98dc120a7b8adc 9-10
+  s_43dd0c2459d79d::t_35401762b49e95 11
+docs/codex-pooler-canary.md
+  s_43dd0c2459d79d::t_3b7fe428de5e73 1-16,18-36,38-40,61,64-65,67-206,220-234
+  s_43dd0c2459d79d::t_d380d8629574aa 17,37,41-54,57-60,62-63,66,207-219
+  s_43dd0c2459d79d::t_efc0b389563d33 55-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "a79a36c5e8ff31155225ee16a125b42b46499805",
+  "prompts": {},
+  "sessions": {
+    "s_43dd0c2459d79d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f5e33-cf7b-7ec2-98e7-eb61d41a06d7",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "Randy Meyer (home-mac) <83611031+rmeyer231@users.noreply.github.com>"
+    }
+  }
+}
