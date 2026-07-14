@@ -106,7 +106,7 @@ def test_install_codex_force_model_routing_resolves_conflict(
     captured = capsys.readouterr()
     assert exit_code == 0
     assert captured.out.count("Backup: backups/cse-") == 1
-    assert "Codex-opus-4-8" in (target / "model-routing.md").read_text(
+    assert "openai/gpt-5.6-sol" in (target / "model-routing.md").read_text(
         encoding="utf-8"
     )
 

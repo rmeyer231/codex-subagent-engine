@@ -356,19 +356,19 @@ def test_model_routing_uses_lowercase_path_reference() -> None:
 
 
 def test_model_routing_has_required_alias_rows() -> None:
-    """The model-routing.md template contains each exact Codex-* alias on a phase row."""
+    """The model-routing.md template contains each exact OpenLimits model row."""
     text = codex_global.load_template("model-routing.md")
     # Required (phase keyword, alias) pairs that must co-occur on the same line.
     required_rows = (
-        ("proposal", "Codex-opus-4-8"),
-        ("spec", "Codex-opus-4-8"),
-        ("architecture", "Codex-opus-4-8"),
-        ("implementation", "Codex-sonnet-4-6"),
-        ("tdd", "Codex-sonnet-4-6"),
-        ("coding", "Codex-sonnet-4-6"),
-        ("summary", "Codex-haiku-4-5"),
-        ("lookup", "Codex-haiku-4-5"),
-        ("low-stakes", "Codex-haiku-4-5"),
+        ("proposal", "openai/gpt-5.6-sol"),
+        ("spec", "openai/gpt-5.6-sol"),
+        ("architecture", "openai/gpt-5.6-sol"),
+        ("implementation", "openai/gpt-5.6-terra"),
+        ("tdd", "openai/gpt-5.6-terra"),
+        ("coding", "openai/gpt-5.6-terra"),
+        ("summary", "openai/gpt-5.6-luna"),
+        ("lookup", "openai/gpt-5.6-luna"),
+        ("low-stakes", "openai/gpt-5.6-luna"),
     )
     for phase, alias in required_rows:
         matched = any(
@@ -382,17 +382,17 @@ def test_model_routing_has_required_alias_rows() -> None:
 
 
 def test_model_routing_default_alias_is_sonnet() -> None:
-    """The default model alias is exactly Codex-sonnet-4-6 on a Markdown table row."""
+    """The default model is exactly OpenLimits Terra on a Markdown table row."""
     text = codex_global.load_template("model-routing.md")
     matched = any(
         "default" in line.lower()
-        and "Codex-sonnet-4-6" in line
+        and "openai/gpt-5.6-terra" in line
         and "|" in line
         for line in text.splitlines()
     )
     assert matched, (
         "model-routing.md missing pipe-delimited Markdown table row "
-        "containing 'default' and 'Codex-sonnet-4-6'"
+        "containing 'default' and 'openai/gpt-5.6-terra'"
     )
 
 
@@ -424,4 +424,3 @@ def test_config_template_agents_defaults() -> None:
     assert int(agents["max_depth"]) == 1
     assert int(agents["job_max_runtime_seconds"]) == 1800
     assert bool(agents["interrupt_message"]) is True
-

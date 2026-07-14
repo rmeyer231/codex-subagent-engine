@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+token="$({{CREDENTIAL_COMMAND}} 2>/dev/null)" || {
+    printf '%s\n' 'claude-openlimits: OpenLimits credential is unavailable in macOS Keychain.' >&2
+    exit 78
+}
+if [ -z "$token" ]; then
+    printf '%s\n' 'claude-openlimits: OpenLimits credential is empty in macOS Keychain.' >&2
+    exit 78
+fi
+
+unset ANTHROPIC_AUTH_TOKEN
+export ANTHROPIC_BASE_URL={{CLAUDE_BASE_URL}}
+export ANTHROPIC_API_KEY="$token"
+export ANTHROPIC_DEFAULT_OPUS_MODEL={{CLAUDE_ARCHITECTURE_MODEL}}
+export ANTHROPIC_DEFAULT_SONNET_MODEL={{CLAUDE_IMPLEMENTATION_MODEL}}
+export ANTHROPIC_DEFAULT_HAIKU_MODEL={{CLAUDE_LOW_STAKES_MODEL}}
+
+exec {{CLAUDE_COMMAND}} "$@"

@@ -1,0 +1,40 @@
+{
+  "captured_at": "2026-07-14T06:41:48Z",
+  "surface": "openlimits-claude-rpce",
+  "status": "waived",
+  "provider": "OpenLimits + RepoPrompt CE",
+  "model": "anthropic/claude-sonnet-5",
+  "billing_destination": "OpenLimits Max",
+  "managed_launcher": "/Users/randymeyer/.local/bin/claude-openlimits-rpce",
+  "external_wrapper": "/usr/local/bin/claude-rpce",
+  "external_wrapper_modified": false,
+  "isolated_validation": {
+    "status": "pass",
+    "checks": [
+      "process-scoped OpenLimits environment",
+      "RepoPrompt CE command composition",
+      "exact argument forwarding",
+      "credential redaction",
+      "idempotence",
+      "rollback"
+    ]
+  },
+  "real_home_apply": {
+    "transaction_id": "txn-20260714T063017.567626Z",
+    "second_apply": "no-op"
+  },
+  "bounded_request": {
+    "automated": "succeeded",
+    "interactive": "succeeded after enabling Use custom API key in /config",
+    "interactive_evidence_source": "user-observed Claude Code response",
+    "failure_cause": "remembered rejection of the process-scoped ANTHROPIC_API_KEY",
+    "credential_value_recorded": false
+  },
+  "billing_attribution": "unresolved pending non-secret OpenLimits dashboard evidence",
+  "waiver": {
+    "recorded_at": "2026-07-14T06:43:09Z",
+    "source": "explicit user waiver",
+    "reason": "Missing provider-dashboard attribution was waived after automated and interactive requests succeeded"
+  },
+  "credential_value_recorded": false
+}

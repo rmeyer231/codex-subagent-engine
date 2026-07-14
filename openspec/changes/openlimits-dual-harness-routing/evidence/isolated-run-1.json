@@ -1,0 +1,86 @@
+{
+  "mode": "isolated",
+  "ready": false,
+  "rows": [
+    {
+      "surface": "isolated-stack",
+      "status": "pass",
+      "provider": "stubbed native + OpenLimits",
+      "model": "canonical policy",
+      "billing_destination": "none (no network)",
+      "evidence_source": "automated temporary-home canary",
+      "reason": "plan, merge, both launchers, idempotence, and rollback passed",
+      "remediation": ""
+    },
+    {
+      "surface": "credential-redaction",
+      "status": "pass",
+      "provider": "fake command-backed credential",
+      "model": "not applicable",
+      "billing_destination": "none (no network)",
+      "evidence_source": "automated report and evidence scan",
+      "reason": "fake credential value absent from report and launcher evidence",
+      "remediation": ""
+    },
+    {
+      "surface": "native-claude",
+      "status": "unresolved",
+      "provider": "Anthropic native",
+      "model": "native subscription selection",
+      "billing_destination": "Claude Pro",
+      "evidence_source": "not run in isolated mode",
+      "reason": "requires an explicitly approved live request",
+      "remediation": ""
+    },
+    {
+      "surface": "openlimits-claude",
+      "status": "unresolved",
+      "provider": "OpenLimits",
+      "model": "anthropic/claude-sonnet-5",
+      "billing_destination": "OpenLimits Max",
+      "evidence_source": "not run in isolated mode",
+      "reason": "requires an explicitly approved live request",
+      "remediation": ""
+    },
+    {
+      "surface": "openlimits-claude-rpce",
+      "status": "unresolved",
+      "provider": "OpenLimits + RepoPrompt CE",
+      "model": "anthropic/claude-sonnet-5",
+      "billing_destination": "OpenLimits Max",
+      "evidence_source": "not run in isolated mode",
+      "reason": "requires an explicitly approved live request through RepoPrompt CE",
+      "remediation": ""
+    },
+    {
+      "surface": "codex-cli",
+      "status": "unresolved",
+      "provider": "OpenLimits",
+      "model": "openai/gpt-5.6-terra",
+      "billing_destination": "OpenLimits Max",
+      "evidence_source": "not run in isolated mode",
+      "reason": "requires an explicitly approved live request",
+      "remediation": ""
+    },
+    {
+      "surface": "codex-app",
+      "status": "unresolved",
+      "provider": "OpenLimits",
+      "model": "openai/gpt-5.6-terra",
+      "billing_destination": "OpenLimits Max",
+      "evidence_source": "user-recorded disposable-checkout canary",
+      "reason": "open Codex App with the effective CODEX_HOME and sole-writer ownership",
+      "remediation": ""
+    },
+    {
+      "surface": "claude-codex-plugin",
+      "status": "unresolved",
+      "provider": "OpenLimits via codex app-server",
+      "model": "openai/gpt-5.6-terra",
+      "billing_destination": "OpenLimits Max",
+      "evidence_source": "user-recorded read-only plugin canary",
+      "reason": "record effective CODEX_HOME and confirm no nested CSE delegation",
+      "remediation": ""
+    }
+  ]
+}

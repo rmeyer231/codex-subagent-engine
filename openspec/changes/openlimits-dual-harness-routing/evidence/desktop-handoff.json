@@ -1,0 +1,30 @@
+{
+  "captured_at": "2026-07-14T04:15:26Z",
+  "surface": "codex-app",
+  "status": "pass",
+  "evidence_kind": "user-observed response plus automated local verification",
+  "checkout": "/tmp/cse-openlimits-handoff-20260714",
+  "branch": "canary/openlimits-app-handoff",
+  "baseline_head": "cc592f3",
+  "phase_owner": "Claude OpenLimits CLI",
+  "write_owner": "Codex App",
+  "objective": "replace CANARY.txt with CSE_APP_HANDOFF_OK followed by one newline",
+  "verification": {
+    "changed_paths": [
+      "CANARY.txt"
+    ],
+    "canary_bytes": 19,
+    "canary_content": "CSE_APP_HANDOFF_OK\n",
+    "diff_check": "clean",
+    "handoff_matches_baseline": true,
+    "head_unchanged": true,
+    "unexpected_untracked_files": false
+  },
+  "ownership_result": "Codex App modified only the permitted file and returned evidence without committing, advancing phases, or changing the handoff artifact.",
+  "provider_attribution": "unresolved pending OpenLimits dashboard evidence",
+  "provider_attribution_waiver": {
+    "recorded_at": "2026-07-14T06:43:09Z",
+    "source": "explicit user waiver",
+    "reason": "Missing provider-dashboard attribution was waived after the functional Codex App handoff passed"
+  }
+}

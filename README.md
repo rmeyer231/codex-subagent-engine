@@ -18,8 +18,43 @@ The project now has two deliberately separate execution paths:
 |------|---------|---------|
 | `cse run` / `cse batch` | This project's Anthropic-backed manifest engine | Executes TOML manifests, dependency ordering, CSV batches, and approval prompts. |
 | `cse install-codex` | Native Codex subagents | Installs global routing policy and custom-agent profiles; Codex itself owns threads, tools, approvals, sandbox enforcement, and result synthesis. |
+| `cse install-openlimits-stack` | Claude + Codex global configuration | Previews, applies, or rolls back the OpenLimits Max + Claude Pro + ChatGPT Free provider boundaries. |
+| `cse validate-openlimits-stack` | Isolated/live routing checks | Proves local configuration safely by default and runs provider requests only with `--live`. |
 
 Installing the native routing bundle does not replace the manifest engine or change `run` and `batch` behavior. It configures Codex rather than making this project a second Codex orchestrator.
+
+## OpenLimits Dual-Harness Stack
+
+The managed stack deliberately gives each application one billing path:
+
+| Surface | Provider and billing |
+| --- | --- |
+| Claude Desktop, ordinary `claude`, and RepoPrompt CE `claude-rpce` | Native Claude Pro |
+| Explicit `claude-openlimits` and `claude-openlimits-rpce` | OpenLimits Max |
+| Codex CLI, Codex App, and Claude's Codex plugin | OpenLimits Max through the shared `CODEX_HOME` |
+| ChatGPT app | ChatGPT Free, manual sessions only |
+
+ChatGPT Free is not API capacity and is never an automatic fallback. Claude
+Desktop does not receive the OpenLimits token. The installer removes managed
+Claude gateway overrides, configures Codex command-backed authentication, and
+creates process-scoped launchers for direct Claude and the optional RepoPrompt
+CE lane. Use `claude-openlimits-rpce` when you want both OpenLimits billing and
+RepoPrompt CE context; use `claude-rpce` when you want RepoPrompt CE with native
+Claude Pro. The legacy `claude-rp` wrapper belongs to the older RepoPrompt app.
+
+Preview is always the default:
+
+```bash
+cse install-openlimits-stack
+cse validate-openlimits-stack
+```
+
+The validator's default mode uses temporary homes and stubs; it performs no
+provider request and does not read or change real global homes. Review the
+operator guide before provisioning Keychain, applying, rolling back, or running
+the explicitly billed live canaries:
+
+- [OpenLimits stack operator guide](docs/openlimits-stack.md)
 
 ## Quick Start
 
@@ -225,12 +260,15 @@ agent-2 (perf reviewer) ─────────┘
 src/
 ├── cli.py          # CLI entrypoint: cse run / cse batch / cse install-codex
 ├── codex_global.py # Native Codex bundle planning, validation, and installation
+├── dual_harness_global.py     # OpenLimits stack planning, transactions, rollback
+├── dual_harness_validation.py # Isolated/live routing evidence and reports
 ├── engine.py       # Core: spawning, dependency ordering, approval
 ├── manifest.py     # TOML parser and config dataclasses
 ├── subagent.py     # Subagent lifecycle: init → execute → report
 ├── approval.py     # Human approval gate with diff display
 ├── batch.py        # CSV batch processing
-└── templates/codex # Packaged native Codex routing resources
+├── templates/codex        # Packaged native Codex routing resources
+└── templates/dual_harness # Canonical policy and Claude/OpenLimits assets
 examples/
 ├── pr-review.toml       # 3 parallel reviewers (security, perf, summary)
 ├── frontend-debug.toml  # map → diagnose → fix

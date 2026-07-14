@@ -1,0 +1,36 @@
+{
+  "captured_at": "2026-07-14T03:59:00Z",
+  "credential_source": "macOS Keychain service=OpenLimits account=api-key",
+  "credential_value_recorded": false,
+  "credential_shape": "nonempty, no surrounding whitespace, implausibly short for a provider API token",
+  "probes": [
+    {
+      "surface": "claude-compatible-messages",
+      "authentication": "x-api-key",
+      "endpoint": "https://openlimits.app/v1/messages",
+      "http_status": 401,
+      "elapsed_seconds": 0.454,
+      "error_type": "authentication_error",
+      "reason": "Invalid or disabled authentication token"
+    },
+    {
+      "surface": "claude-compatible-messages",
+      "authentication": "authorization-bearer",
+      "endpoint": "https://openlimits.app/v1/messages",
+      "http_status": 401,
+      "elapsed_seconds": 0.207,
+      "error_type": "authentication_error",
+      "reason": "Invalid or disabled authentication token"
+    }
+  ],
+  "original_conclusion": "The original Keychain item was not an active OpenLimits API token.",
+  "replacement_verification": {
+    "captured_at": "2026-07-14T04:04:23Z",
+    "credential_value_recorded": false,
+    "credential_shape": "plausible provider token with no surrounding whitespace",
+    "openlimits_claude_cli": "bounded request succeeded",
+    "openlimits_codex_cli": "bounded request succeeded",
+    "billing_attribution": "unresolved pending provider-dashboard evidence"
+  },
+  "conclusion": "The replacement Keychain item authenticates successfully through both managed OpenLimits CLI lanes."
+}

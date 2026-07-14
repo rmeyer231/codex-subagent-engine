@@ -1,5 +1,34 @@
 schema: spec-driven
 
+context: |
+  Python 3.11+ CLI package managed with uv, pytest, Ruff, Hatch, and tomlkit.
+  Native Codex routing uses cse install-codex and must remain compatible.
+  The opt-in dual-harness workflow uses cse install-openlimits-stack and
+  cse validate-openlimits-stack. It manages ~/.claude/settings.json,
+  ~/.claude/CLAUDE.md, ~/.claude/model-routing.md,
+  ~/.local/bin/claude-openlimits, ~/.local/bin/claude-openlimits-rpce,
+  and the existing ~/.codex bundle. Claude Desktop, ordinary claude, and
+  RepoPrompt CE's claude-rpce stay native through Claude Pro; the composed
+  claude-openlimits-rpce command adds RepoPrompt CE to the OpenLimits lane.
+  Codex CLI, Codex App, and Claude's Codex plugin use OpenLimits through the
+  shared CODEX_HOME. ChatGPT Free is a separate manual fallback, not API capacity.
+  Credentials are retrieved from macOS Keychain at runtime and must never appear
+  in repository files, generated configuration, previews, logs, backups, or reports.
+  Preview and isolated validation are the defaults. Live requests and real-home
+  mutation require explicit options and user approval. Apply must be transactional,
+  reversible, idempotent, and tested only with temporary homes/fake credentials.
+
+rules:
+  proposal:
+    - State provider and billing boundaries for every affected application surface.
+    - Keep subscription changes outside automated tooling.
+  design:
+    - Preserve unrelated Claude JSON, Codex TOML, plugins, hooks, MCP, and user prose.
+    - Require command-backed runtime credentials, atomic writes, and cross-home rollback.
+  tasks:
+    - Include no-network temporary-home tests before any real-home preview or live canary.
+    - Treat ambiguous provider or billing attribution as unresolved, never passing.
+
 # Project context (optional)
 # This is shown to AI when creating artifacts.
 # Add your tech stack, conventions, style guides, domain knowledge, etc.

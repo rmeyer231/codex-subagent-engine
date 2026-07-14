@@ -1,0 +1,86 @@
+{
+  "mode": "live",
+  "ready": true,
+  "rows": [
+    {
+      "surface": "isolated-stack",
+      "status": "pass",
+      "provider": "stubbed native + OpenLimits",
+      "model": "canonical policy",
+      "billing_destination": "none (no network)",
+      "evidence_source": "automated temporary-home canary",
+      "reason": "plan, merge, both launchers, idempotence, and rollback passed",
+      "remediation": ""
+    },
+    {
+      "surface": "credential-redaction",
+      "status": "pass",
+      "provider": "fake command-backed credential",
+      "model": "not applicable",
+      "billing_destination": "none (no network)",
+      "evidence_source": "automated report and evidence scan",
+      "reason": "fake credential value absent from report and launcher evidence",
+      "remediation": ""
+    },
+    {
+      "surface": "codex-app",
+      "status": "waived",
+      "provider": "OpenLimits",
+      "model": "openai/gpt-5.6-terra",
+      "billing_destination": "OpenLimits Max",
+      "evidence_source": "explicit user waiver",
+      "reason": "User waived missing provider-dashboard attribution after the Codex App write handoff succeeded with exact 19-byte output and CANARY.txt as the sole changed path",
+      "remediation": "record an OpenLimits dashboard timestamp or request identifier, or explicitly waive billing attribution"
+    },
+    {
+      "surface": "claude-codex-plugin",
+      "status": "waived",
+      "provider": "OpenLimits via codex app-server",
+      "model": "openai/gpt-5.6-terra",
+      "billing_destination": "OpenLimits Max",
+      "evidence_source": "explicit user waiver",
+      "reason": "User waived missing provider-dashboard attribution after the read-only plugin job completed with the expected CODEX_HOME, provider, model, delegation boundary, and no file modifications",
+      "remediation": "record an OpenLimits dashboard timestamp or request identifier, or explicitly waive billing attribution"
+    },
+    {
+      "surface": "native-claude",
+      "status": "waived",
+      "provider": "Anthropic native",
+      "model": "native subscription selection",
+      "billing_destination": "Claude Pro",
+      "evidence_source": "explicit user waiver",
+      "reason": "User waived the native Claude CLI canary until Claude Pro or login state refreshes",
+      "remediation": "complete the bounded request in Claude Desktop or refresh the ordinary Claude CLI login"
+    },
+    {
+      "surface": "openlimits-claude",
+      "status": "waived",
+      "provider": "OpenLimits",
+      "model": "anthropic/claude-sonnet-5",
+      "billing_destination": "OpenLimits Max",
+      "evidence_source": "explicit user waiver",
+      "reason": "User waived missing provider-dashboard attribution after the bounded OpenLimits Claude request succeeded",
+      "remediation": "record a non-secret provider dashboard timestamp or request identifier"
+    },
+    {
+      "surface": "openlimits-claude-rpce",
+      "status": "waived",
+      "provider": "OpenLimits + RepoPrompt CE",
+      "model": "anthropic/claude-sonnet-5",
+      "billing_destination": "OpenLimits Max",
+      "evidence_source": "explicit user waiver",
+      "reason": "User waived missing provider-dashboard attribution after bounded automated and interactive requests succeeded through RepoPrompt CE",
+      "remediation": "record a non-secret provider dashboard timestamp or request identifier"
+    },
+    {
+      "surface": "codex-cli",
+      "status": "waived",
+      "provider": "OpenLimits",
+      "model": "openai/gpt-5.6-terra",
+      "billing_destination": "OpenLimits Max",
+      "evidence_source": "explicit user waiver",
+      "reason": "User waived missing provider-dashboard attribution after the bounded OpenLimits Codex CLI request succeeded",
+      "remediation": "record a non-secret provider dashboard timestamp or request identifier"
+    }
+  ]
+}

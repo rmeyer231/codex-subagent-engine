@@ -29,6 +29,7 @@ cse = "src.cli:main"
 packages = ["src"]
 include = [
     "src/templates/codex/**",
+    "src/templates/dual_harness/**",
 ]
 
 [tool.pytest.ini_options]
