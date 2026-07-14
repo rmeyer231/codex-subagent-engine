@@ -132,6 +132,8 @@ ruff check src tests
 openspec validate global-codex-subagent-routing
 ```
 
+For an isolated, opt-in evaluation of Codex Pooler as an external provider, see the [experimental Codex Pooler canary](docs/codex-pooler-canary.md). CSE does not install Pooler or change the default provider.
+
 ## Manifest Format
 
 ```toml
